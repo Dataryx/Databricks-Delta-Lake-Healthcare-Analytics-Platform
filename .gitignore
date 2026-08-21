@@ -1,0 +1,73 @@
+# Secrets & local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+.databricks/
+.databricks.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Spark / Delta local state
+spark-warehouse/
+metastore_db/
+derby.log
+.local_delta/
+data/local/
+*.crc
+_delta_log/.tmp*
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Terraform
+infra/terraform/.terraform/
+infra/terraform/*.tfstate*
+infra/terraform/*.tfplan
+infra/terraform/crash.log
+.terraform.lock.hcl.backup
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Artifacts & exports (may contain study extracts)
+artifacts/
+exports/
+RESEARCH_MANIFEST.json
+*.parquet
+!data/synthetic/**/*.parquet
+
+# Logs
+logs/
+*.log
+
+# Java / Ivy (Spark downloads)
+.ivy2/
+.m2/
+
+# Windows Hadoop winutils (downloaded by scripts/setup_windows_hadoop.py)
+tools/hadoop/bin/winutils.exe
+tools/hadoop/bin/hadoop.dll

@@ -1,0 +1,33 @@
+# Platform defaults (overridden by environment variables — see .env.example)
+runtime_mode: local
+env: dev
+catalog: hc_dev
+org: INDHC
+azure_region: eastus2
+uc_metastore: uc_metastore_eastus2
+storage_account: stindominushclake
+local_delta_root: .local_delta
+small_cell_k: 11
+retention_years: 7
+deid_salt_env_key: HC_DEID_SALT
+log_level: INFO
+log_format: json
+
+synthetic:
+  source: synthea
+  seed: 42
+  patient_count: 100
+  survey_instruments:
+    - PHQ-9
+    - GAD-7
+    - PROMIS-29
+    - EQ-5D-5L
+    - SF-36
+
+layers:
+  bronze_cdf: true
+  fail_closed: true
+
+extra:
+  pipeline_version: "0.1.0"
+  deid_standard: "HIPAA Safe Harbor"

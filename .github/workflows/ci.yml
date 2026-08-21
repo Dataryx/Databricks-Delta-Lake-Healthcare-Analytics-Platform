@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-type-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install package
+        run: |
+          python -m pip install -U pip setuptools wheel
+          pip install -e ".[dev]"
+      - name: Ruff
+        run: |
+          ruff check src tests scripts
+          ruff format --check src tests scripts
+      - name: Mypy
+        run: mypy src/hc_lakehouse
+      - name: Unit + privacy tests
+        run: pytest tests/unit tests/privacy -q --cov=hc_lakehouse --cov-report=xml
+      - name: Integration (Spark + Delta)
+        run: pytest tests/integration -q
+      - name: PHI scan
+        run: python -m hc_lakehouse.privacy.phi_scanner .
+
+  terraform-plan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.5"
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive || true
+      - name: Placeholder plan
+        run: |
+          echo "Terraform modules land in Phase 10; fmt/plan wired then."
+          test -d . || true

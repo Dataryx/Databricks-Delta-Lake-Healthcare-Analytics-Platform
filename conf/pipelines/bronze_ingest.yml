@@ -1,0 +1,12 @@
+# Placeholder pipeline config — expanded in Phase 2 / Phase 10
+name: bronze_ingest
+enabled: false
+description: Auto Loader bronze ingestion (wired in Phase 2)
+schedule: "0 */6 * * *"
+source:
+  format: cloudFiles
+  path_pattern: "landing/clinical/*"
+target:
+  schema: bronze
+checkpoints:
+  root: checkpoints/bronze

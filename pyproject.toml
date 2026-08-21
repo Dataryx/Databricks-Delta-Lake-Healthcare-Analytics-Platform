@@ -1,0 +1,113 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hc-lakehouse"
+version = "0.1.0"
+description = "Healthcare research Lakehouse on Azure Databricks and Delta Lake (synthetic data only)."
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Indominus Health Research Consortium" }]
+dependencies = [
+  "pyspark>=3.5.0,<4.0.0",
+  "delta-spark>=3.2.0,<4.0.0",
+  "pyyaml>=6.0.1",
+  "python-dotenv>=1.0.0",
+  "jsonschema>=4.21.0",
+  "cryptography>=42.0.0",
+  "typing-extensions>=4.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "chispa>=0.10.0",
+  "ruff>=0.3.0",
+  "mypy>=1.8.0",
+  "types-PyYAML>=6.0.0",
+  "pre-commit>=3.6.0",
+  "black>=24.1.0",
+]
+ml = [
+  "mlflow>=2.10.0",
+  "scikit-learn>=1.4.0",
+  "pandas>=2.1.0",
+  "numpy>=1.26.0",
+]
+databricks = [
+  "databricks-sdk>=0.20.0",
+  "databricks-connect>=15.0.0",
+]
+
+[project.scripts]
+hc-reproduce = "hc_lakehouse.reproducibility.reproduce:main"
+hc-phi-scan = "hc_lakehouse.privacy.phi_scanner:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+hc_lakehouse = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q --strict-markers"
+markers = [
+  "integration: full medallion chain against local Delta",
+  "privacy: de-identification and access-control assertions",
+  "quality: data-quality rule engine tests",
+  "reproducibility: manifest checksum and time-travel tests",
+]
+
+[tool.coverage.run]
+source = ["hc_lakehouse"]
+branch = true
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+# Ratchet toward 80% as transformation modules land (Phases 2–6).
+fail_under = 40
+show_missing = true
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "S", "SIM"]
+ignore = [
+  "S101",  # assert OK in tests
+  "S105",  # demo salt strings are not production secrets
+  "S106",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106"]
+"scripts/**" = ["S101"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+mypy_path = "src"
+packages = ["hc_lakehouse"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["pyspark.*", "delta.*", "chispa.*"]
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]

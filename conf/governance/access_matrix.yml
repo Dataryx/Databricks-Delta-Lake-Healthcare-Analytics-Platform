@@ -1,0 +1,16 @@
+# Access matrix skeleton — fully implemented in Phase 8
+version: 1
+org: INDHC
+principle: least_privilege_minimum_necessary
+groups:
+  - hc_data_engineers
+  - hc_data_stewards
+  - hc_researchers_lds
+  - hc_researchers_deid
+  - hc_data_scientists
+  - hc_analysts
+  - hc_auditors
+  - hc_breakglass_reid
+grants: []
+masks: []
+row_filters: []

@@ -1,0 +1,23 @@
+name: CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Bundle target (dev|test|prod)
+        required: true
+        default: dev
+        type: choice
+        options: [dev, test, prod]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.target }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy placeholder
+        run: |
+          echo "Databricks Asset Bundle deploy for target=${{ github.event.inputs.target }}"
+          echo "Full CD (databricks bundle deploy) is implemented in Phase 10."
+          echo "Prod requires manual environment approval in GitHub Environments."
