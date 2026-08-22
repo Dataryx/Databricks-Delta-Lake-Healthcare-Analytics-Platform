@@ -1,7 +1,7 @@
 # Model card: prom_nonresponder_cluster
 
 - **Version:** 1.0.0
-- **Generated:** 2026-08-22T21:17:37.440273+00:00
+- **Generated:** 2026-08-22T22:16:47.233493+00:00
 
 ## Critical disclaimer
 

@@ -1,7 +1,7 @@
 # Model card: readmission_30d
 
 - **Version:** 1.0.0
-- **Generated:** 2026-08-22T21:17:06.907999+00:00
+- **Generated:** 2026-08-22T22:16:19.714417+00:00
 
 ## Critical disclaimer
 

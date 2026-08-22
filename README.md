@@ -1,4 +1,4 @@
-﻿# Indominus Health Research Lakehouse
+﻿# Health Research Lakehouse
 
 Azure Databricks + Delta Lake platform for healthcare research at Indominus Health
 Research Consortium (INDHC).

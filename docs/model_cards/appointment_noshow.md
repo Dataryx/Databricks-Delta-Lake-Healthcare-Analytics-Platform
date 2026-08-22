@@ -1,7 +1,7 @@
 # Model card: appointment_noshow
 
 - **Version:** 1.0.0
-- **Generated:** 2026-08-22T21:17:21.719810+00:00
+- **Generated:** 2026-08-22T22:16:31.134992+00:00
 
 ## Critical disclaimer
 
