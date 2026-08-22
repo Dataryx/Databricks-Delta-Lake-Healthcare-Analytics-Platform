@@ -220,5 +220,11 @@ def build_silver_core(
     counts["lab_result"] = labs.count()
     counts["lab_result_quarantine"] = lab_orphans.count() if lab_orphans.limit(1).count() else 0
 
+    # Populate ops.dq_results (Gold promotion gate enforced separately via run_dq)
+    from hc_lakehouse.quality.runner import validate_all_silver
+
+    dq_reports = validate_all_silver(spark, config=cfg, enforce_gate=False)
+    counts["dq_error_failures"] = sum(len(r.error_failures) for r in dq_reports.values())
+
     logger.info("silver_core_complete", extra=counts)
     return counts

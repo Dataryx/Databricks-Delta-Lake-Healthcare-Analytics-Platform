@@ -1,0 +1,54 @@
+# Data-quality ruleset: silver.patient
+version: 1
+table: silver.patient
+owner: hc_data_stewards
+rules:
+  - id: pat_pk_not_null
+    category: completeness
+    severity: error
+    owner: hc_data_stewards
+    description: patient_sk must be present
+    type: not_null
+    column: patient_sk
+    threshold: 1.0
+
+  - id: pat_sk_unique
+    category: uniqueness
+    severity: error
+    owner: hc_data_engineers
+    description: one current row per patient_sk among is_current=true
+    type: unique
+    columns: [patient_sk]
+    filter: "is_current = true"
+    threshold: 1.0
+
+  - id: pat_sex_enum
+    category: validity
+    severity: warn
+    owner: hc_data_stewards
+    description: sex in allowed set when present
+    type: allowed_values
+    column: sex
+    values: [female, male, other, unknown]
+    threshold: 0.99
+
+  - id: pat_birth_year_range
+    category: range
+    severity: error
+    owner: hc_data_stewards
+    description: birth_year plausible
+    type: between
+    column: birth_year
+    min: 1900
+    max: 2024
+    threshold: 1.0
+
+  - id: pat_zip3_length
+    category: validity
+    severity: warn
+    owner: hc_data_stewards
+    description: zip3 is 3 digits when present
+    type: regex
+    column: zip3
+    pattern: "^[0-9]{3}$"
+    threshold: 0.99

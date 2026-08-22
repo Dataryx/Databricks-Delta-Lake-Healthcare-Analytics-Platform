@@ -64,7 +64,8 @@ Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
 | 2 Bronze | **Complete** |
 | 3 Silver (core) | **Complete** |
 | 4 Privacy / Safe Harbor | **Complete** |
-| 5–11 | Pending |
+| 5 Data quality | **Complete** |
+| 6–11 | Pending |
 
 ## License
 

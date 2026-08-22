@@ -1,0 +1,47 @@
+# Data-quality ruleset: silver.lab_result
+version: 1
+table: silver.lab_result
+owner: hc_data_stewards
+rules:
+  - id: lab_pk_not_null
+    category: completeness
+    severity: error
+    owner: hc_data_stewards
+    type: not_null
+    column: lab_result_sk
+    threshold: 1.0
+
+  - id: lab_patient_not_null
+    category: completeness
+    severity: error
+    owner: hc_data_stewards
+    type: not_null
+    column: patient_sk
+    threshold: 1.0
+
+  - id: lab_loinc_not_null
+    category: completeness
+    severity: error
+    owner: hc_data_stewards
+    type: not_null
+    column: loinc_code
+    threshold: 1.0
+
+  - id: lab_pk_unique
+    category: uniqueness
+    severity: error
+    owner: hc_data_engineers
+    type: unique
+    columns: [lab_result_sk]
+    threshold: 1.0
+
+  - id: lab_value_plausible
+    category: range
+    severity: warn
+    owner: hc_data_stewards
+    description: numeric lab values within broad clinical bounds when present
+    type: between
+    column: value_num
+    min: -1.0
+    max: 10000.0
+    threshold: 0.98

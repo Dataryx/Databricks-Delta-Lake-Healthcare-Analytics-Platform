@@ -1,0 +1,54 @@
+# Data-quality ruleset: silver.encounter
+version: 1
+table: silver.encounter
+owner: hc_data_stewards
+rules:
+  - id: enc_pk_not_null
+    category: completeness
+    severity: error
+    owner: hc_data_stewards
+    type: not_null
+    column: encounter_sk
+    threshold: 1.0
+
+  - id: enc_patient_not_null
+    category: completeness
+    severity: error
+    owner: hc_data_stewards
+    type: not_null
+    column: patient_sk
+    threshold: 1.0
+
+  - id: enc_pk_unique
+    category: uniqueness
+    severity: error
+    owner: hc_data_engineers
+    type: unique
+    columns: [encounter_sk]
+    threshold: 1.0
+
+  - id: enc_window
+    category: consistency
+    severity: error
+    owner: hc_data_stewards
+    description: discharge_ts >= admit_ts when both present
+    type: expression
+    expression: "discharge_ts IS NULL OR discharge_ts >= admit_ts"
+    threshold: 1.0
+
+  - id: enc_admit_not_future
+    category: timeliness
+    severity: warn
+    owner: hc_data_engineers
+    type: expression
+    expression: "admit_ts IS NULL OR admit_ts <= current_timestamp()"
+    threshold: 0.99
+
+  - id: enc_care_setting_enum
+    category: validity
+    severity: warn
+    owner: hc_data_stewards
+    type: allowed_values
+    column: care_setting
+    values: [inpatient, outpatient, emergency, ambulatory]
+    threshold: 0.95
