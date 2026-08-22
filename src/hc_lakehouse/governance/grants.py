@@ -98,10 +98,10 @@ def apply_grants(
         )
         return sql_path
 
-    # Cloud path placeholder — execute via Databricks SQL warehouse / SDK in Phase 10
+    # Cloud path: run via Databricks SQL warehouse / SDK during CD
     logger.warning(
         "uc_apply_deferred",
-        extra={"detail": "Wire databricks-sdk statement execution in Phase 10 CD."},
+        extra={"detail": "Wire Databricks SDK statement execution in CD."},
     )
     return sql_path
 

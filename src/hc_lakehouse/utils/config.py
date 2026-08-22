@@ -1,7 +1,7 @@
-"""Platform configuration loader.
+﻿"""Platform configuration loader.
 
 All table names, paths, thresholds, and environment knobs come from environment
-variables and YAML under ``conf/``. No secrets are stored in this module.
+variables and YAML under ``config/``. No secrets are stored in this module.
 """
 
 from __future__ import annotations
@@ -19,9 +19,10 @@ from hc_lakehouse.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
-# Repository root: src/hc_lakehouse/utils/config.py → parents[3]
+# src/hc_lakehouse/utils/config.py -> repository root
 REPO_ROOT = Path(__file__).resolve().parents[3]
-CONF_ROOT = REPO_ROOT / "conf"
+CONFIG_ROOT = REPO_ROOT / "config"
+CONF_ROOT = CONFIG_ROOT  # alias kept for existing call sites
 
 
 @dataclass(frozen=True)
@@ -117,7 +118,7 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 
 def load_yaml_config(relative: str) -> dict[str, Any]:
-    """Load a YAML file from ``conf/`` by relative path."""
+    """Load a YAML file from ``config/`` by relative path."""
     path = CONF_ROOT / relative
     logger.debug("loading_config_file", extra={"path": str(path)})
     return _load_yaml(path)
@@ -125,7 +126,7 @@ def load_yaml_config(relative: str) -> dict[str, Any]:
 
 @lru_cache(maxsize=1)
 def load_config(*, dotenv_path: str | None = None) -> PlatformConfig:
-    """Load platform config from ``.env`` + optional ``conf/platform.yml``.
+    """Load platform config from ``.env`` + optional ``config/platform.yml``.
 
     Parameters
     ----------

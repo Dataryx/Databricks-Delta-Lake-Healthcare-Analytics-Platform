@@ -1,4 +1,7 @@
 # Data model
 
-Documented in Phase 6 (Gold) and Phase 3 (Silver). See `conf/dictionary/` for the
-machine-readable source of table/column comments and `docs/gold.md` for grains.
+Silver contracts define typed entities under config/contracts/.
+Gold follows a Kimball layout (dimensions, facts, marts) described in docs/gold.md
+and ADR 0006.
+
+Use table comments and the contract YAML as the source of truth for grain.

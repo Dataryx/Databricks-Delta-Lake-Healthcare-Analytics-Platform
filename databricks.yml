@@ -1,4 +1,5 @@
-# Databricks Asset Bundle — Indominus Health Research Lakehouse
+# Databricks Asset Bundle — INDHC lakehouse
+
 bundle:
   name: hc-lakehouse
 
@@ -7,14 +8,14 @@ include:
 
 variables:
   catalog:
-    description: Unity Catalog name for this environment
+    description: Unity Catalog name for this target
   env:
-    description: Environment name (dev|test|prod|local)
+    description: Environment (dev | test | prod | local)
   small_cell_k:
-    description: Small-cell suppression threshold
+    description: Minimum cell size for aggregate disclosure
     default: 11
   notification_email:
-    description: Failure notification target (group mailbox)
+    description: Job failure mailbox
     default: "hc-platform-oncall@example.invalid"
 
 targets:
@@ -50,4 +51,3 @@ targets:
       env: prod
     workspace:
       host: ${DATABRICKS_HOST}
-    # Manual approval: GitHub Environment `prod` required in CD

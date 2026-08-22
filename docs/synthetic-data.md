@@ -17,7 +17,7 @@ reproducibility without Java Synthea dependencies.
 
 ## Seed
 
-Default seed: **42** (`conf/platform.yml` → `synthetic.seed`).
+Default seed: **42** (`config/platform.yml` → `synthetic.seed`).
 
 ```bash
 python scripts/generate_synthetic.py --seed 42 --patients 100 --output data/synthetic

@@ -5,7 +5,7 @@
 - Silver contract validation quarantine spike
 
 ## Steps
-1. Diff landing header vs `conf/contracts/*.yml`.
+1. Diff landing header vs `config/contracts/*.yml`.
 2. If additive non-breaking: update contract + DQ rules; deploy via PR.
 3. If breaking: stop promotion (`gate_promotion`), quarantine remaining files.
 4. Backfill only after contract version bump and dual-read validation in `hc_test`.

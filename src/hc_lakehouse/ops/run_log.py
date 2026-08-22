@@ -22,7 +22,7 @@ WriteMode = Literal["append", "overwrite"]
 
 
 def load_sla_config(path: Path | None = None) -> dict[str, Any]:
-    cfg_path = path or (REPO_ROOT / "conf" / "ops" / "sla.yml")
+    cfg_path = path or (REPO_ROOT / "config" / "ops" / "sla.yml")
     with cfg_path.open(encoding="utf-8") as fh:
         data: dict[str, Any] = yaml.safe_load(fh)
     return data

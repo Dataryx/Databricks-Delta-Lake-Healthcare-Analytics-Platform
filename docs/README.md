@@ -1,23 +1,27 @@
-# Documentation index
+# Docs
 
-| Doc | Purpose |
-|-----|---------|
-| [architecture.md](architecture.md) | Landing zone + medallion overview |
-| [bronze.md](bronze.md) | Bronze ingest |
-| [silver.md](silver.md) | Silver contracts / cleansing |
-| [gold.md](gold.md) | Dims, facts, marts |
-| [data-quality.md](data-quality.md) | YAML DQ engine |
-| [data-model.md](data-model.md) | Model notes |
-| [deidentification-methodology.md](deidentification-methodology.md) | Safe Harbor method |
-| [governance.md](governance.md) | Access matrix / break-glass |
-| [lineage.md](lineage.md) | Mermaid lineage (CI-refreshable) |
-| [reproducibility.md](reproducibility.md) | Cohort manifests |
-| [ml.md](ml.md) | Features + research models |
-| [orchestration.md](orchestration.md) | DLT, Workflows, Terraform, CI/CD |
-| [hipaa-control-mapping.md](hipaa-control-mapping.md) | Technical safeguard mapping |
-| [synthetic-data.md](synthetic-data.md) | Generator notes |
-| [runbooks/](runbooks/) | Ops runbooks |
-| [adr/](adr/) | Architecture decision records |
-| [../ASSUMPTIONS.md](../ASSUMPTIONS.md) | Resolved template defaults |
-| [../serving/sql/](../serving/sql/) | Dashboard SQL as code |
-| [../notebooks/researcher_onboarding.py](../notebooks/researcher_onboarding.py) | Researcher starter notebook |
+New here? Read architecture first, then assumptions.
+
+| Doc | What you will find |
+|-----|--------------------|
+| [architecture.md](architecture.md) | Medallion flow and Azure layout |
+| [bronze.md](bronze.md) | Landing into Bronze |
+| [silver.md](silver.md) | Contracts, cleansing, de-id |
+| [gold.md](gold.md) | Dimensions, facts, marts |
+| [data-quality.md](data-quality.md) | YAML rules and fail-closed gates |
+| [data-model.md](data-model.md) | Table grain notes |
+| [deidentification-methodology.md](deidentification-methodology.md) | Safe Harbor method we use |
+| [governance.md](governance.md) | Access matrix and break-glass |
+| [lineage.md](lineage.md) | Mermaid lineage |
+| [reproducibility.md](reproducibility.md) | Cohort manifests and checksums |
+| [ml.md](ml.md) | Features, models, fairness |
+| [orchestration.md](orchestration.md) | DLT, jobs, Terraform, CI/CD |
+| [hipaa-control-mapping.md](hipaa-control-mapping.md) | Technical controls mapped to HIPAA themes |
+| [synthetic-data.md](synthetic-data.md) | How demo data is generated |
+| [assumptions.md](assumptions.md) | Locked project defaults |
+| [runbooks/](runbooks/) | Day-2 operations |
+| [adr/](adr/) | Decision records |
+| [model_cards/](model_cards/) | Cards for registered models |
+
+Dashboard SQL: [../dashboards/sql/](../dashboards/sql/)  
+Researcher notebook: [../notebooks/researcher_onboarding.py](../notebooks/researcher_onboarding.py)

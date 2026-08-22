@@ -1,4 +1,4 @@
-# CI — lint, typecheck, tests, PHI scan, grants diff, terraform validate
+﻿# CI â€” lint, typecheck, tests, PHI scan, grants diff, terraform validate
 
 name: CI
 
@@ -89,5 +89,5 @@ jobs:
           test -f resources/jobs.yml
           test -f resources/pipelines.yml
           test -f pipelines/dlt/bronze_silver_dlt.py
-          test -f conf/cluster_policies/hc_job_policy.json
+          test -f config/cluster_policies/hc_job_policy.json
           echo "Asset Bundle resources present (databricks bundle validate requires workspace auth)."

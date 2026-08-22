@@ -1,4 +1,4 @@
-"""Schema contract loader and drift checks."""
+﻿"""Schema contract loader and drift checks."""
 
 from __future__ import annotations
 
@@ -62,7 +62,7 @@ class SchemaContract:
 
 
 def load_contract(entity: str) -> SchemaContract:
-    """Load ``conf/contracts/<entity>.yml``."""
+    """Load ``config/contracts/<entity>.yml``."""
     path = CONF_ROOT / "contracts" / f"{entity}.yml"
     if not path.exists():
         raise FileNotFoundError(f"Schema contract not found: {path}")

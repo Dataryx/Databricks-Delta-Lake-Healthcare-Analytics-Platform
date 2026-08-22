@@ -1,4 +1,4 @@
-"""Serving-layer helpers: register dashboard SQL paths and validate presence."""
+"""Helpers for warehouse SQL under ``dashboards/sql``."""
 
 from __future__ import annotations
 
@@ -10,18 +10,19 @@ from hc_lakehouse.utils.logging import get_logger
 logger = get_logger(__name__)
 
 DASHBOARD_SQL = (
-    "dashboard_utilization.sql",
-    "dashboard_readmission.sql",
-    "dashboard_prom.sql",
-    "dashboard_linkage.sql",
+    "utilization.sql",
+    "readmission.sql",
+    "prom_scores.sql",
+    "clinical_prom_linkage.sql",
 )
 
 
 def dashboard_sql_dir() -> Path:
-    return REPO_ROOT / "serving" / "sql"
+    return REPO_ROOT / "dashboards" / "sql"
 
 
 def list_dashboard_sql() -> list[Path]:
+    """Return the core dashboard query paths. Raises if any file is missing."""
     root = dashboard_sql_dir()
     paths = [root / name for name in DASHBOARD_SQL]
     missing = [p for p in paths if not p.exists()]

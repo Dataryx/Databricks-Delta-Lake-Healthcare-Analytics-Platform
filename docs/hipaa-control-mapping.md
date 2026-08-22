@@ -1,24 +1,24 @@
-# HIPAA technical control mapping (supportive — not a certification)
+﻿# HIPAA technical controls in this repo
 
-> This repository implements **technical safeguards that support** HIPAA Privacy and
-> Security Rule expectations. Organizational policies, BAAs, workforce training, and
-> independent audit remain required. **This is not a HIPAA certification.**
+These are the technical safeguards we built to support HIPAA Privacy and Security
+Rule expectations. They do not replace BAAs, policies, workforce training, or an
+independent audit. This document is not a certification.
 
-| Safeguard theme | Example regulatory concepts | Repository control |
-|---|---|---|
-| Minimum necessary | Privacy Rule access limitation | Group-only Unity Catalog grants from `conf/governance/access_matrix.yml`; deny defaults; no `account users` grants |
-| De-identification | Safe Harbor §164.514(b)(2) | HMAC `patient_sk`, ZIP3, age bands; methodology in `docs/deidentification-methodology.md` |
-| Access control | §164.312(a) | SCIM groups, schema isolation (`restricted`, `sandbox`), break-glass re-id log |
-| Audit controls | §164.312(b) | `ops.access_audit_daily`, `ops.reid_request_log`, `ops.pipeline_run_log` |
-| Integrity | §164.312(c) | Delta CDF, DQ fail-closed gate, quarantine path (no silent drops) |
-| Transmission / secrets | §164.312(e) | Key Vault / secret scope for de-id pepper; no secrets in git (`.env.example` only) |
-| Retention | Organizational policy | Configurable `retention_years` (default 7) on audit rows |
-| Disclosure limitation | Small-cell / aggregate | `k=11` suppression on utilization mart and dashboard SQL `HAVING COUNT(*) >= 11` |
-| Contingency | Admin safeguards (aligned) | DR runbook with RPO/RTO; Delta time travel |
-| Workforce / training | Admin safeguards | Researcher onboarding notebook + governance docs (org still owns training) |
+| Theme | What we mean in practice | Where it shows up |
+|-------|--------------------------|-------------------|
+| Minimum necessary | Only approved groups get table access | `config/governance/access_matrix.yml` |
+| De-identification | Safe Harbor style tokens and geo/age generalization | `docs/deidentification-methodology.md` |
+| Access control | SCIM groups, restricted schemas, break-glass log | governance package + ops tables |
+| Audit | Who queried what, re-id requests, pipeline runs | `ops.*` tables |
+| Integrity | Fail-closed DQ, quarantine, Delta change feed | quality package + Silver/Gold builds |
+| Secrets | Pepper and keys stay out of git | Key Vault / secret scope; `.env.example` only |
+| Retention | Configurable audit retention (default 7 years) | platform config |
+| Small cells | Suppress thin aggregates | k=11 on marts and dashboard SQL |
+| Contingency | Restore from Delta history / DR runbook | `docs/runbooks/` |
+| Training support | Onboarding notebook and docs | org still owns formal training |
 
-## Explicit non-claims
+## What we are not claiming
 
-- No claim of HIPAA “compliance” or certification as a fact.
-- Synthetic data only in this repository; production PHI handling requires org controls beyond code.
-- ML models are research / decision-support artifacts, not clinical devices.
+- HIPAA "compliance" or certification as a fact
+- That synthetic demo data equals a production PHI environment
+- That ML models are clinical devices or medical advice

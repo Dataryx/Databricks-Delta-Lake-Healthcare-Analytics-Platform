@@ -13,8 +13,8 @@
 
 - Root: [`databricks.yml`](../databricks.yml)
 - Resources: [`resources/jobs.yml`](../resources/jobs.yml), [`resources/pipelines.yml`](../resources/pipelines.yml)
-- Cluster policy JSON: [`conf/cluster_policies/hc_job_policy.json`](../conf/cluster_policies/hc_job_policy.json)
-- SLA config: [`conf/ops/sla.yml`](../conf/ops/sla.yml)
+- Cluster policy JSON: [`config/cluster_policies/hc_job_policy.json`](../config/cluster_policies/hc_job_policy.json)
+- SLA config: [`config/ops/sla.yml`](../config/ops/sla.yml)
 
 Jobs use retries with exponential backoff intervals, timeouts, failure email notifications,
 and spot-with-fallback where allowed.

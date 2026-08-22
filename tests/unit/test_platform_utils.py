@@ -1,4 +1,4 @@
-"""Unit tests for Phase 0 platform utilities."""
+"""Unit tests for platform utilities."""
 
 from __future__ import annotations
 

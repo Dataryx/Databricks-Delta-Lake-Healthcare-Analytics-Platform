@@ -4,7 +4,7 @@ Fail-closed validation for Silver (and later Gold) tables.
 
 ## Rules as code
 
-YAML under `conf/quality/`:
+YAML under `config/quality/`:
 
 | File | Table |
 |------|-------|

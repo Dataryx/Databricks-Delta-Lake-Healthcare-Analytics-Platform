@@ -1,5 +1,5 @@
-# Healthcare Research Lakehouse — developer targets
-# Requires: Python 3.10+, GNU Make, Java 11+ (for local PySpark)
+# Healthcare research lakehouse — Make targets
+# Needs: Python 3.10+, Make, JDK 11 or 17 for local Spark
 
 PYTHON ?= python
 PIP ?= $(PYTHON) -m pip
@@ -36,9 +36,9 @@ help:
 	@echo "  ops-report       Pipeline run log + freshness + cost SQL"
 	@echo "  terraform-validate  fmt + init -backend=false + validate"
 	@echo "  spark-smoke      Start local Spark+Delta and write a smoke Delta table"
-	@echo "  demo             full chain through ML + ops report"
+	@echo "  demo             End-to-end local pipeline through ML and ops report"
 	@echo "  pre-commit-install  Install git hooks"
-	@echo "  clean            Remove local Delta, caches, build artifacts"
+	@echo "  clean            Remove local Delta, caches, and build artifacts"
 
 setup: install windows-hadoop pre-commit-install
 	@echo "Setup complete. Copy .env.example to .env if needed."
@@ -112,7 +112,7 @@ terraform-validate:
 	cd infra/terraform && terraform fmt -check -recursive && terraform init -backend=false && terraform validate
 
 demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort apply-governance build-features train-ml ops-report spark-smoke
-	@echo "Phases 0–11: lakehouse demo complete (synthetic data only)."
+	@echo "Local demo finished. Tables are under .local_delta/ (synthetic data only)."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"

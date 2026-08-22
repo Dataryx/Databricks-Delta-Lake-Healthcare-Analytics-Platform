@@ -61,13 +61,27 @@ class JsonFormatter(logging.Formatter):
 
 
 class StructuredAdapter(logging.LoggerAdapter[logging.Logger]):
-    """Logger adapter that merges structured fields into the record."""
+    """Logger adapter that merges structured fields into the record.
+
+    Renames keys that collide with ``LogRecord`` reserved attributes (e.g. ``name``).
+    """
+
+    _RESERVED = frozenset(logging.makeLogRecord({}).__dict__.keys()) | {
+        "message",
+        "asctime",
+    }
 
     def process(self, msg: str, kwargs: Any) -> tuple[str, Any]:
         extra = dict(self.extra or {})
         user_extra = kwargs.pop("extra", {}) or {}
         extra.update(user_extra)
-        kwargs["extra"] = extra
+        safe: dict[str, Any] = {}
+        for key, value in extra.items():
+            if key in self._RESERVED:
+                safe[f"field_{key}"] = value
+            else:
+                safe[key] = value
+        kwargs["extra"] = safe
         return msg, kwargs
 
 

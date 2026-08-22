@@ -32,7 +32,8 @@ spark-warehouse/
 metastore_db/
 derby.log
 .local_delta/
-data/local/
+.local_delta/
+mlruns/
 *.crc
 _delta_log/.tmp*
 
@@ -74,3 +75,7 @@ logs/
 # Windows Hadoop winutils (downloaded by scripts/setup_windows_hadoop.py)
 tools/hadoop/bin/winutils.exe
 tools/hadoop/bin/hadoop.dll
+mlruns/
+
+.local_delta/
+

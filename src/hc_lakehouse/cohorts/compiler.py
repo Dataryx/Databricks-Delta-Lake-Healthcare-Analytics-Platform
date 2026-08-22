@@ -222,7 +222,7 @@ def register_cohort(
     )
     mode: WriteMode = "append" if table_exists(spark, path) else "overwrite"
     write_delta(row, path, mode=mode, enable_cdf=False)
-    logger.info("cohort_registered", extra={"name": definition.name, "path": path})
+    logger.info("cohort_registered", extra={"cohort": definition.name, "path": path})
 
 
 def json_dumps(obj: dict[str, int]) -> str:
@@ -249,7 +249,7 @@ def build_cohort(
     logger.info(
         "cohort_built",
         extra={
-            "name": definition.name,
+            "cohort": definition.name,
             "rows": manifest.row_count,
             "checksum": manifest.output_checksum[:16],
         },

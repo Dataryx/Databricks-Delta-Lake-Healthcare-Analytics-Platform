@@ -1,4 +1,4 @@
-"""Data-quality rule definitions loaded from ``conf/quality/*.yml``."""
+﻿"""Data-quality rule definitions loaded from ``config/quality/*.yml``."""
 
 from __future__ import annotations
 
@@ -79,7 +79,7 @@ def _parse_rule(raw: dict[str, Any]) -> QualityRule:
 
 
 def load_ruleset(name: str) -> QualityRuleset:
-    """Load ``conf/quality/<name>.yml`` (with or without ``.yml``)."""
+    """Load ``config/quality/<name>.yml`` (with or without ``.yml``)."""
     stem = name.removesuffix(".yml")
     path = CONF_ROOT / "quality" / f"{stem}.yml"
     if not path.exists():
@@ -95,7 +95,7 @@ def load_ruleset(name: str) -> QualityRuleset:
     )
     logger.info(
         "ruleset_loaded",
-        extra={"name": stem, "table": rs.table, "rules": len(rs.rules)},
+        extra={"ruleset": stem, "table": rs.table, "rules": len(rs.rules)},
     )
     return rs
 

@@ -1,6 +1,5 @@
-# Runtime dependencies for local demo (PySpark + Delta Lake).
-# Prefer `pip install -e ".[dev]"` which installs from pyproject.toml.
-# Hashed lockfile generation is documented in docs/reproducibility.md (Phase 7+).
+# Pinned runtime deps for a quick local install.
+# Prefer: pip install -e ".[dev,ml]" (reads pyproject.toml).
 
 pyspark==3.5.5
 delta-spark==3.2.1

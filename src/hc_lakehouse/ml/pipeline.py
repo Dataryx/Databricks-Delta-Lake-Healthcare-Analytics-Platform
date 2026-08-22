@@ -25,7 +25,7 @@ logger = get_logger(__name__)
 
 
 def load_ml_config(path: Path | None = None) -> dict[str, Any]:
-    cfg_path = path or (REPO_ROOT / "conf" / "ml" / "models.yml")
+    cfg_path = path or (REPO_ROOT / "config" / "ml" / "models.yml")
     with cfg_path.open(encoding="utf-8") as fh:
         data: dict[str, Any] = yaml.safe_load(fh)
     return data

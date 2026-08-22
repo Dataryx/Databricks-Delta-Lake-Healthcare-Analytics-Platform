@@ -22,7 +22,7 @@ make build-features
 
 ## Models
 
-Configured in [`conf/ml/models.yml`](../conf/ml/models.yml).
+Configured in [`config/ml/models.yml`](../config/ml/models.yml).
 
 | Model | Purpose |
 |-------|---------|

@@ -12,14 +12,22 @@ logger = get_logger(__name__)
 
 
 def configure_mlflow(config: PlatformConfig | None = None) -> str:
-    """Set tracking URI. Local: ``artifacts/mlruns``. Cloud: workspace MLflow."""
+    """Set tracking URI. Local: SQLite under ``artifacts/mlflow``. Cloud: workspace MLflow."""
+    import os
+
     import mlflow
 
     cfg = config or load_config()
     if cfg.is_local:
-        uri = str((REPO_ROOT / "artifacts" / "mlruns").resolve())
-        Path(uri).mkdir(parents=True, exist_ok=True)
+        root = (REPO_ROOT / "artifacts" / "mlflow").resolve()
+        root.mkdir(parents=True, exist_ok=True)
+        db_path = root / "mlflow.db"
+        # Absolute Windows paths must use file: URI form for SQLAlchemy
+        uri = f"sqlite:///{db_path.as_posix()}"
+        os.environ.setdefault("MLFLOW_TRACKING_URI", uri)
         mlflow.set_tracking_uri(uri)
+        # Artifact root alongside the DB (file:// URI works on Windows)
+        os.environ.setdefault("MLFLOW_ARTIFACT_ROOT", (root / "artifacts").as_uri())
         logger.info("mlflow_tracking_local", extra={"uri": uri})
         return uri
     # Cloud: rely on Databricks-hosted MLflow; UC models via models:/catalog.schema.name
@@ -38,7 +46,7 @@ def log_and_register(
 ) -> str:
     """Fit already done — log sklearn model to MLflow and register locally.
 
-    Returns run_id. UC three-level naming is recorded as a tag for Phase 10 CD.
+    Returns run_id. UC three-level naming is recorded as a tag for cloud CD.
     """
     import mlflow
     import mlflow.sklearn
@@ -58,7 +66,12 @@ def log_and_register(
                 mlflow.log_param(f"metric_{k}", str(v))
         mlflow.set_tag("uc_model_name", uc_name)
         mlflow.set_tag("disclaimer", "research_decision_support_not_clinical_device")
-        mlflow.sklearn.log_model(model, artifact_path="model")
+        # Prefer cloudpickle over skops so calibrated / ensemble estimators serialize cleanly
+        mlflow.sklearn.log_model(
+            model,
+            artifact_path="model",
+            serialization_format="cloudpickle",
+        )
         for path in artifact_paths or []:
             if path.exists():
                 mlflow.log_artifact(str(path))

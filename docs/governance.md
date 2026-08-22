@@ -1,7 +1,7 @@
 # Governance
 
 Entra ID groups are the only principals. The access matrix lives in
-[`conf/governance/access_matrix.yml`](../conf/governance/access_matrix.yml) and is
+[`config/governance/access_matrix.yml`](../config/governance/access_matrix.yml) and is
 applied by `make apply-governance` (generates reviewable SQL; live UC apply is
 cloud/CD).
 

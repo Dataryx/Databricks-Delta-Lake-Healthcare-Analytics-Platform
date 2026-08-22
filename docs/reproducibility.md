@@ -2,7 +2,7 @@
 
 ## Cohorts
 
-Declarative YAML under `conf/cohorts/`. Compiler materializes `gold.cohort_<name>`
+Declarative YAML under `config/cohorts/`. Compiler materializes `gold.cohort_<name>`
 and registers provenance in `ops.cohort_registry`.
 
 ```bash

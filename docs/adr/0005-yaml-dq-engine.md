@@ -10,7 +10,7 @@ non-DLT paths. Local demo cannot run DLT.
 
 ## Decision
 
-1. Author rules once in `conf/quality/*.yml`.
+1. Author rules once in `config/quality/*.yml`.
 2. Implement `validate()` with the same semantics (severity, threshold, categories).
 3. Persist every execution to `ops.dq_results`.
 4. `gate_promotion` fails closed on error severity; warn/info never block.

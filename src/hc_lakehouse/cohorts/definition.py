@@ -1,4 +1,4 @@
-"""Cohort definition loading from ``conf/cohorts/*.yml``."""
+﻿"""Cohort definition loading from ``config/cohorts/*.yml``."""
 
 from __future__ import annotations
 
@@ -77,7 +77,7 @@ def load_cohort(name: str) -> CohortDefinition:
     )
     logger.info(
         "cohort_loaded",
-        extra={"name": defn.name, "hash": defn.definition_hash[:12]},
+        extra={"cohort": defn.name, "hash": defn.definition_hash[:12]},
     )
     return defn
 

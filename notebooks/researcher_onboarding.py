@@ -1,6 +1,6 @@
 # Databricks notebook source
-# Researcher onboarding — Indominus Health Research Consortium
-# Synthetic / de-identified data only. Models are not clinical devices.
+# Researcher onboarding for INDHC
+# Uses synthetic / de-identified data only.
 
 # COMMAND ----------
 
@@ -12,8 +12,8 @@
 # MAGIC 2. Join clinical Gold to PRO scores
 # MAGIC 3. Export a de-identified extract with a research manifest
 # MAGIC
-# MAGIC **Rules:** no restricted crosswalk access without break-glass justification;
-# MAGIC never print source identifiers; ML outputs are research artifacts only.
+# MAGIC Stay out of the restricted crosswalk unless break-glass is approved.
+# MAGIC Do not print source identifiers. Model scores are research artifacts, not clinical advice.
 
 # COMMAND ----------
 

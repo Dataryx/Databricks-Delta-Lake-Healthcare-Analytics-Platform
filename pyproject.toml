@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hc-lakehouse"
 version = "0.1.0"
-description = "Healthcare research Lakehouse on Azure Databricks and Delta Lake (synthetic data only)."
+description = "Healthcare research lakehouse for Azure Databricks and Delta Lake (synthetic data only)."
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
 license = { text = "Apache-2.0" }
@@ -69,7 +69,7 @@ branch = true
 omit = ["*/tests/*"]
 
 [tool.coverage.report]
-# Ratchet toward 80% as transformation modules land (Phases 2–6).
+# Coverage floor while the suite grows. Bump toward 80% as modules stabilize.
 fail_under = 40
 show_missing = true
 exclude_lines = [

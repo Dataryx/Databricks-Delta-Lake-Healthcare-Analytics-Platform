@@ -1,4 +1,8 @@
-"""Healthcare research Lakehouse package (synthetic data only)."""
+"""Indominus healthcare research lakehouse package.
+
+Transforms and controls for synthetic clinical + PRO data. Nothing in this
+package should assume real PHI is present.
+"""
 
 from __future__ import annotations
 

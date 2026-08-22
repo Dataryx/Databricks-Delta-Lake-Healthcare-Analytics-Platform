@@ -1,4 +1,4 @@
-"""PHI-shaped pattern scanner for pre-commit and CI.
+﻿"""PHI-shaped pattern scanner for pre-commit and CI.
 
 Scans text files for patterns that look like real identifiers (MRN, SSN, NPI,
 DOB, email, phone, ZIP+4). Synthetic fixtures must use clearly fake tokens that
@@ -113,7 +113,7 @@ PHI_PATTERNS: tuple[PhiPattern, ...] = (
 # Allowlisted path fragments (docs explaining patterns, scanner itself, examples)
 ALLOWLIST_PATH_FRAGMENTS = (
     "phi_scanner.py",
-    "ASSUMPTIONS.md",
+    "docs/assumptions.md",
     "docs/deidentification",
     "docs/hipaa",
     ".env.example",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local Spark + Delta smoke test for Phase 0.
+"""Local Spark + Delta smoke test.
 
 Creates a tiny Delta table under ``.local_delta/ops/smoke`` to prove the
 developer machine can run the medallion stack without Azure.
