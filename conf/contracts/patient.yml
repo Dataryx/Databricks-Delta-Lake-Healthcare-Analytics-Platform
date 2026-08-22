@@ -1,0 +1,50 @@
+# Schema contract: silver.patient
+entity: patient
+layer: silver
+grain: one current-or-historical demographic row per patient_sk + valid_from (SCD2)
+version: 1
+primary_key: [patient_sk, valid_from]
+natural_key: [patient_sk]
+columns:
+  - name: patient_sk
+    type: string
+    nullable: false
+    comment: Surrogate key (HMAC of source id); no direct identifier
+  - name: sex
+    type: string
+    nullable: true
+    comment: Normalized sex code
+  - name: race
+    type: string
+    nullable: true
+  - name: ethnicity
+    type: string
+    nullable: true
+  - name: birth_year
+    type: integer
+    nullable: true
+    comment: Year only after Safe Harbor (Phase 4); interim from bronze
+  - name: age_band
+    type: string
+    nullable: true
+  - name: zip3
+    type: string
+    nullable: true
+  - name: deceased_flag
+    type: boolean
+    nullable: false
+  - name: valid_from
+    type: timestamp
+    nullable: false
+  - name: valid_to
+    type: timestamp
+    nullable: true
+  - name: is_current
+    type: boolean
+    nullable: false
+  - name: row_hash
+    type: string
+    nullable: false
+  - name: _batch_id
+    type: string
+    nullable: false

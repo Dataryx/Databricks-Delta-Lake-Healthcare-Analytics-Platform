@@ -1,0 +1,35 @@
+# Schema contract: silver.encounter
+entity: encounter
+layer: silver
+grain: one encounter per encounter_sk
+version: 1
+primary_key: [encounter_sk]
+natural_key: [encounter_sk]
+columns:
+  - name: encounter_sk
+    type: string
+    nullable: false
+  - name: patient_sk
+    type: string
+    nullable: false
+  - name: provider_sk
+    type: string
+    nullable: true
+  - name: organization_sk
+    type: string
+    nullable: true
+  - name: care_setting
+    type: string
+    nullable: false
+  - name: admit_ts
+    type: timestamp
+    nullable: false
+  - name: discharge_ts
+    type: timestamp
+    nullable: true
+  - name: _batch_id
+    type: string
+    nullable: false
+checks:
+  - name: chk_encounter_window
+    expression: "discharge_ts IS NULL OR discharge_ts >= admit_ts"

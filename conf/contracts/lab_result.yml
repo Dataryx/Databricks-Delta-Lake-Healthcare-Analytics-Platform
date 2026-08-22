@@ -1,0 +1,31 @@
+# Schema contract: silver.lab_result
+entity: lab_result
+layer: silver
+grain: one resulted lab test
+version: 1
+primary_key: [lab_result_sk]
+columns:
+  - name: lab_result_sk
+    type: string
+    nullable: false
+  - name: patient_sk
+    type: string
+    nullable: false
+  - name: encounter_sk
+    type: string
+    nullable: true
+  - name: loinc_code
+    type: string
+    nullable: false
+  - name: value_num
+    type: double
+    nullable: true
+  - name: unit
+    type: string
+    nullable: true
+  - name: resulted_ts
+    type: timestamp
+    nullable: true
+  - name: _batch_id
+    type: string
+    nullable: false
