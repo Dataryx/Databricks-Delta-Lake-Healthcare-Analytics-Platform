@@ -9,7 +9,7 @@ TESTS := tests
 
 .PHONY: help setup install lint typecheck test test-unit test-integration \
 	phi-scan demo clean pre-commit-install spark-smoke format windows-hadoop \
-	generate-synthetic ingest-bronze build-silver run-dq
+	generate-synthetic ingest-bronze build-silver run-dq build-gold
 
 help:
 	@echo "Targets:"
@@ -25,8 +25,9 @@ help:
 	@echo "  ingest-bronze    Landing CSV → Bronze Delta"
 	@echo "  build-silver     Bronze → Silver core (patient/encounter/lab)"
 	@echo "  run-dq           Validate Silver; block on error-severity failures"
+	@echo "  build-gold       DQ-gated Gold dims/facts/marts"
 	@echo "  spark-smoke      Start local Spark+Delta and write a smoke Delta table"
-	@echo "  demo             generate → bronze → silver → dq gate → smoke"
+	@echo "  demo             full chain through Gold"
 	@echo "  pre-commit-install  Install git hooks"
 	@echo "  clean            Remove local Delta, caches, build artifacts"
 
@@ -80,8 +81,11 @@ build-silver:
 run-dq:
 	$(PYTHON) scripts/run_dq.py
 
-demo: generate-synthetic ingest-bronze build-silver run-dq spark-smoke
-	@echo "Phases 0–5: synthetic → Bronze → Silver → DQ gate complete."
+build-gold:
+	$(PYTHON) scripts/build_gold.py
+
+demo: generate-synthetic ingest-bronze build-silver run-dq build-gold spark-smoke
+	@echo "Phases 0–6: synthetic → Bronze → Silver → DQ → Gold complete."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"

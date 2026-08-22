@@ -48,6 +48,7 @@ BRONZE_TABLES: dict[str, str] = {
     "survey_item": "survey_item_raw",
     "survey_administration": "survey_administration_raw",
     "survey_response": "survey_response_raw",
+    "survey_score": "survey_score_raw",
     "consent": "consent_raw",
 }
 
