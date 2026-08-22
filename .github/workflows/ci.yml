@@ -1,9 +1,11 @@
+# CI — lint, typecheck, tests, PHI scan, grants diff, terraform validate
+
 name: CI
 
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, master]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -28,7 +30,7 @@ jobs:
       - name: Install package
         run: |
           python -m pip install -U pip setuptools wheel
-          pip install -e ".[dev]"
+          pip install -e ".[dev,ml]"
       - name: Ruff
         run: |
           ruff check src tests scripts
@@ -37,12 +39,30 @@ jobs:
         run: mypy src/hc_lakehouse
       - name: Unit + privacy tests
         run: pytest tests/unit tests/privacy -q --cov=hc_lakehouse --cov-report=xml
+        env:
+          HC_RUNTIME_MODE: local
+          HC_DEID_SALT: local-demo-pepper-not-for-production
       - name: Integration (Spark + Delta)
         run: pytest tests/integration -q
+        env:
+          HC_RUNTIME_MODE: local
+          HC_DEID_SALT: local-demo-pepper-not-for-production
       - name: PHI scan
         run: python -m hc_lakehouse.privacy.phi_scanner .
+      - name: Grants SQL dry-run + diff artifact
+        run: |
+          python scripts/apply_governance.py
+          python - <<'PY'
+          from pathlib import Path
+          from hc_lakehouse.governance.grants import grants_diff_report
+          p = Path("artifacts/governance")
+          files = sorted(p.glob("grants_*.sql"))
+          assert files, "expected grants SQL artifact"
+          print("grants_lines", len(files[0].read_text(encoding="utf-8").splitlines()))
+          print("diff_vs_empty", len(grants_diff_report("", files[0].read_text(encoding="utf-8"))))
+          PY
 
-  terraform-plan:
+  terraform-validate:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -53,8 +73,21 @@ jobs:
         with:
           terraform_version: "1.7.5"
       - name: Terraform fmt
-        run: terraform fmt -check -recursive || true
-      - name: Placeholder plan
+        run: terraform fmt -check -recursive
+      - name: Terraform init (no backend)
+        run: terraform init -backend=false
+      - name: Terraform validate
+        run: terraform validate
+
+  bundle-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: DAB structure check
         run: |
-          echo "Terraform modules land in Phase 10; fmt/plan wired then."
-          test -d . || true
+          test -f databricks.yml
+          test -f resources/jobs.yml
+          test -f resources/pipelines.yml
+          test -f pipelines/dlt/bronze_silver_dlt.py
+          test -f conf/cluster_policies/hc_job_policy.json
+          echo "Asset Bundle resources present (databricks bundle validate requires workspace auth)."

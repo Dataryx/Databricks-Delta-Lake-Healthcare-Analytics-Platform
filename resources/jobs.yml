@@ -1,0 +1,98 @@
+# Lakehouse DAG: Gold → cohort → features → ML (after DLT Bronze/Silver)
+resources:
+  jobs:
+    hc_gold_cohort_ml:
+      name: "[${var.env}] hc gold → cohort → features → ml"
+      tags:
+        org: INDHC
+        env: ${var.env}
+        pipeline: gold_cohort_ml
+        Owner: hc-platform
+        CostCenter: INDHC-Research
+      max_concurrent_runs: 1
+      timeout_seconds: 14400
+      email_notifications:
+        on_failure:
+          - ${var.notification_email}
+      schedule:
+        quartz_cron_expression: "0 0 6 * * ?"
+        timezone_id: "America/New_York"
+        pause_status: PAUSED
+      job_clusters:
+        - job_cluster_key: job_compute
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "Standard_DS3_v2"
+            num_workers: 2
+            azure_attributes:
+              availability: SPOT_WITH_FALLBACK_AZURE
+            custom_tags:
+              Owner: hc-platform
+              CostCenter: INDHC-Research
+              ResourceClass: JobCompute
+      tasks:
+        - task_key: build_gold
+          job_cluster_key: job_compute
+          max_retries: 2
+          min_retry_interval_millis: 60000
+          timeout_seconds: 3600
+          spark_python_task:
+            python_file: ../scripts/build_gold.py
+        - task_key: build_cohort
+          depends_on:
+            - task_key: build_gold
+          job_cluster_key: job_compute
+          max_retries: 2
+          min_retry_interval_millis: 60000
+          timeout_seconds: 1800
+          spark_python_task:
+            python_file: ../scripts/build_cohort.py
+            parameters:
+              - "--name"
+              - "inpatient_utilizers"
+        - task_key: build_features
+          depends_on:
+            - task_key: build_gold
+          job_cluster_key: job_compute
+          max_retries: 2
+          min_retry_interval_millis: 60000
+          timeout_seconds: 3600
+          spark_python_task:
+            python_file: ../scripts/build_features.py
+        - task_key: train_ml
+          depends_on:
+            - task_key: build_features
+          job_cluster_key: job_compute
+          max_retries: 1
+          min_retry_interval_millis: 120000
+          timeout_seconds: 7200
+          spark_python_task:
+            python_file: ../scripts/train_ml.py
+        - task_key: apply_governance
+          depends_on:
+            - task_key: build_gold
+          job_cluster_key: job_compute
+          max_retries: 1
+          timeout_seconds: 900
+          spark_python_task:
+            python_file: ../scripts/apply_governance.py
+
+    hc_bronze_silver_dlt_trigger:
+      name: "[${var.env}] hc trigger DLT bronze→silver"
+      tags:
+        org: INDHC
+        env: ${var.env}
+        pipeline: bronze_silver_dlt
+        Owner: hc-platform
+      max_concurrent_runs: 1
+      timeout_seconds: 7200
+      email_notifications:
+        on_failure:
+          - ${var.notification_email}
+      tasks:
+        - task_key: refresh_dlt
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.hc_bronze_silver.id}
+          max_retries: 2
+          min_retry_interval_millis: 60000
+          timeout_seconds: 5400

@@ -1,0 +1,22 @@
+# Pipeline schedules and SLA freshness thresholds
+version: 1
+pipelines:
+  bronze_silver_dlt:
+    schedule_cron: "0 */6 * * *"
+    sla_hours: 8
+    owner: hc-platform
+    tables:
+      - bronze.patient_raw
+      - bronze.encounter_raw
+      - silver.patient
+  gold_cohort_ml:
+    schedule_cron: "0 6 * * *"
+    sla_hours: 24
+    owner: hc-platform
+    tables:
+      - gold.mart_patient_360
+      - gold.fact_readmission
+      - ml.ft_patient_demographics
+freshness_monitor:
+  table: ops.table_freshness
+  alert_on_miss: true

@@ -23,8 +23,8 @@ make test
 make phi-scan
 ```
 
-`make demo` runs Phases 1–9: synthetic → Bronze → Silver → DQ → Gold → cohort →
-governance → features → ML train → Spark+Delta smoke.
+`make demo` runs Phases 1–10: synthetic → Bronze → Silver → DQ → Gold → cohort →
+governance → features → ML → ops report → Spark+Delta smoke.
 
 ## Architecture (target)
 
@@ -69,7 +69,8 @@ Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
 | 7 Cohorts + reproducibility | **Complete** |
 | 8 Governance | **Complete** |
 | 9 Data science / ML | **Complete** |
-| 10–11 | Pending |
+| 10 Orchestration / CI-CD | **Complete** |
+| 11 Serving + docs polish | Pending |
 
 ## License
 

@@ -37,3 +37,9 @@ Assumptions that affect architecture or privacy must be recorded as ADRs under `
 8. **Medication adherence** feature is an order-density proxy, not true PDC.
 9. **Models** are research / decision-support artifacts; they are not medical devices or clinical advice.
 10. **Local MLflow** uses `artifacts/mlruns`; Unity Catalog model registration is tagged for cloud apply in Phase 10.
+
+## Orchestration assumptions (Phase 10)
+
+11. **Cloud Bronze→Silver** uses DLT + Auto Loader; **local demo** keeps batch scripts with the same package transforms.
+12. **CD to prod** requires GitHub Environment approval and workspace secrets (`DATABRICKS_HOST` / `DATABRICKS_TOKEN`).
+13. **Terraform** creates Azure storage/Key Vault by default; UC metastore resources are opt-in via `enable_databricks_resources`.

@@ -10,7 +10,7 @@ TESTS := tests
 .PHONY: help setup install lint typecheck test test-unit test-integration \
 	phi-scan demo clean pre-commit-install spark-smoke format windows-hadoop \
 	generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort \
-	apply-governance build-features train-ml
+	apply-governance build-features train-ml ops-report terraform-validate
 
 COHORT ?= inpatient_utilizers
 
@@ -33,8 +33,10 @@ help:
 	@echo "  apply-governance Grants SQL, tags, lineage, audit/review seed"
 	@echo "  build-features   ML feature tables (ml.ft_*)"
 	@echo "  train-ml         Train/register research models + model cards"
+	@echo "  ops-report       Pipeline run log + freshness + cost SQL"
+	@echo "  terraform-validate  fmt + init -backend=false + validate"
 	@echo "  spark-smoke      Start local Spark+Delta and write a smoke Delta table"
-	@echo "  demo             full chain through Gold + cohort + governance + ML"
+	@echo "  demo             full chain through ML + ops report"
 	@echo "  pre-commit-install  Install git hooks"
 	@echo "  clean            Remove local Delta, caches, build artifacts"
 
@@ -103,8 +105,14 @@ build-features:
 train-ml:
 	$(PYTHON) scripts/train_ml.py
 
-demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort apply-governance build-features train-ml spark-smoke
-	@echo "Phases 0–9: medallion + DQ + Gold + cohort + governance + ML complete."
+ops-report:
+	$(PYTHON) scripts/ops_report.py --pipeline local_demo --status success
+
+terraform-validate:
+	cd infra/terraform && terraform fmt -check -recursive && terraform init -backend=false && terraform validate
+
+demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort apply-governance build-features train-ml ops-report spark-smoke
+	@echo "Phases 0–10: medallion + governance + ML + ops complete."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"

@@ -1,20 +1,21 @@
 # Databricks Asset Bundle — Indominus Health Research Lakehouse
-# Full job/pipeline wiring lands in Phase 10; Phase 0 defines targets only.
-
 bundle:
   name: hc-lakehouse
 
 include:
-  - conf/pipelines/*.yml
+  - resources/*.yml
 
 variables:
   catalog:
     description: Unity Catalog name for this environment
   env:
-    description: Environment name (dev|test|prod)
+    description: Environment name (dev|test|prod|local)
   small_cell_k:
     description: Small-cell suppression threshold
     default: 11
+  notification_email:
+    description: Failure notification target (group mailbox)
+    default: "hc-platform-oncall@example.invalid"
 
 targets:
   local:
@@ -24,7 +25,7 @@ targets:
       catalog: hc_dev
       env: local
     workspace:
-      host: https://localhost  # unused in local PySpark mode
+      host: https://localhost
 
   dev:
     mode: development
@@ -49,4 +50,4 @@ targets:
       env: prod
     workspace:
       host: ${DATABRICKS_HOST}
-    # Manual approval gate enforced in CD (Phase 10)
+    # Manual approval: GitHub Environment `prod` required in CD

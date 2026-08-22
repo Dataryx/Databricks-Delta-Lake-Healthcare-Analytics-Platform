@@ -1,0 +1,39 @@
+{
+  "spark_conf.spark.databricks.cluster.profile": {
+    "type": "fixed",
+    "value": "singleNode",
+    "hidden": true
+  },
+  "num_workers": {
+    "type": "range",
+    "minValue": 1,
+    "maxValue": 8,
+    "defaultValue": 2
+  },
+  "node_type_id": {
+    "type": "allowlist",
+    "values": ["Standard_DS3_v2", "Standard_DS4_v2", "Standard_E4ds_v5"],
+    "defaultValue": "Standard_DS3_v2"
+  },
+  "autotermination_minutes": {
+    "type": "fixed",
+    "value": 30
+  },
+  "custom_tags.Owner": {
+    "type": "fixed",
+    "value": "hc-platform"
+  },
+  "custom_tags.CostCenter": {
+    "type": "fixed",
+    "value": "INDHC-Research"
+  },
+  "dbus_per_hour": {
+    "type": "range",
+    "maxValue": 40
+  },
+  "azure_attributes.availability": {
+    "type": "unlimited",
+    "defaultValue": "SPOT_WITH_FALLBACK_AZURE",
+    "isOptional": true
+  }
+}

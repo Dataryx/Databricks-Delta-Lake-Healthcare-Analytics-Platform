@@ -1,0 +1,28 @@
+# Delta Live Tables: Bronze → Silver with expectations (cloud)
+resources:
+  pipelines:
+    hc_bronze_silver:
+      name: "[${var.env}] hc bronze→silver DLT"
+      catalog: ${var.catalog}
+      target: silver
+      channel: CURRENT
+      photon: true
+      continuous: false
+      development: true
+      clusters:
+        - label: default
+          num_workers: 2
+          node_type_id: "Standard_DS3_v2"
+          azure_attributes:
+            availability: SPOT_WITH_FALLBACK_AZURE
+          custom_tags:
+            Owner: hc-platform
+            Pipeline: bronze_silver_dlt
+            CostCenter: INDHC-Research
+      libraries:
+        - file:
+            path: ../pipelines/dlt/bronze_silver_dlt.py
+      configuration:
+        hc.catalog: ${var.catalog}
+        hc.env: ${var.env}
+        hc.small_cell_k: ${var.small_cell_k}

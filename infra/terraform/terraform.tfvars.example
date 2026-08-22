@@ -1,0 +1,8 @@
+# Example tfvars — copy to terraform.tfvars (never commit secrets)
+location              = "eastus2"
+resource_group_name   = "rg-indominus-hc-lake"
+storage_account_name  = "stindominushclake"
+key_vault_name        = "kv-indominus-hc"
+# tenant_id             = "..."
+# databricks_account_id = "..."
+enable_databricks_resources = false

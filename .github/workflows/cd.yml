@@ -1,3 +1,5 @@
+# CD — Asset Bundle deploy with environment approval on prod
+
 name: CD
 
 on:
@@ -16,8 +18,17 @@ jobs:
     environment: ${{ github.event.inputs.target }}
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy placeholder
+      - uses: databricks/setup-cli@v0.240.0
+      - name: Bundle deploy
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          echo "Databricks Asset Bundle deploy for target=${{ github.event.inputs.target }}"
-          echo "Full CD (databricks bundle deploy) is implemented in Phase 10."
-          echo "Prod requires manual environment approval in GitHub Environments."
+          set -euo pipefail
+          TARGET="${{ github.event.inputs.target }}"
+          echo "Deploying Asset Bundle to target=${TARGET}"
+          if [[ "${TARGET}" == "prod" ]]; then
+            echo "Prod deploy requires GitHub Environment approval + workspace secrets."
+          fi
+          databricks bundle validate -t "${TARGET}"
+          databricks bundle deploy -t "${TARGET}"
