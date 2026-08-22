@@ -112,7 +112,7 @@ terraform-validate:
 	cd infra/terraform && terraform fmt -check -recursive && terraform init -backend=false && terraform validate
 
 demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort apply-governance build-features train-ml ops-report spark-smoke
-	@echo "Phases 0–10: medallion + governance + ML + ops complete."
+	@echo "Phases 0–11: lakehouse demo complete (synthetic data only)."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"

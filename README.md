@@ -1,13 +1,16 @@
-# Indominus Health Research Lakehouse
+# Healthcare research Lakehouse — Indominus Health Research Consortium
 
 Production-grade **healthcare research Lakehouse** on Azure Databricks and Delta Lake.
 Transforms synthetic clinical + patient-reported outcome (PRO) data into governed Bronze →
 Silver → Gold models with HIPAA-aligned technical safeguards, fail-closed quality gates,
-and research-grade reproducibility.
+research reproducibility, Unity Catalog governance, and research-only ML artifacts.
 
 > **Compliance note:** This repository implements *technical safeguards that support* HIPAA
 > Privacy and Security Rule expectations. Compliance also requires organizational policy,
 > BAAs, workforce training, and audit. This code is **not** a certification.
+>
+> **ML note:** Models are research / decision-support artifacts only — **not** medical devices
+> or clinical advice.
 
 ## Quickstart (local, no Azure)
 
@@ -18,42 +21,48 @@ python -m venv .venv
 source .venv/bin/activate
 # Local Spark needs JDK 11/17 (set JAVA_HOME). On Windows, setup also fetches winutils.
 make setup
-make spark-smoke   # Phase 0: prove Spark + Delta
+make spark-smoke
 make test
 make phi-scan
+make demo
 ```
 
-`make demo` runs Phases 1–10: synthetic → Bronze → Silver → DQ → Gold → cohort →
-governance → features → ML → ops report → Spark+Delta smoke.
+`make demo` runs Phases 1–11: synthetic → Bronze → Silver → DQ → Gold → cohort →
+governance → features → ML → ops report → Spark smoke.
 
-## Architecture (target)
+## Architecture
 
 ```mermaid
 flowchart LR
-  Landing[ADLS Landing] --> Bronze[Bronze raw CDF]
-  Bronze --> Silver[Silver conformed de-id]
-  Silver --> Gold[Gold dims facts marts]
-  Silver --> Restricted[restricted xref]
-  Gold --> Serving[SQL Warehouse / MLflow]
-  DQ[Quality gates] -.-> Bronze
-  DQ -.-> Silver
+  Landing[ADLS / local landing] --> Bronze[Bronze CDF]
+  Bronze --> Silver[Silver de-id]
+  Silver --> Gold[Gold + cohorts]
+  Gold --> ML[Features + MLflow]
+  Gold --> Serving[SQL dashboards]
+  DQ[Quality gates] -.-> Silver
   DQ -.-> Gold
+  UC[Governance + lineage] -.-> Silver
 ```
+
+Details: [`docs/architecture.md`](docs/architecture.md) · index: [`docs/README.md`](docs/README.md)
 
 ## Repository map
 
 | Path | Purpose |
 |------|---------|
-| `src/hc_lakehouse/` | Transformations, privacy, quality, governance |
-| `conf/` | Pipelines, contracts, DQ rules, cohorts, access matrix, ML |
-| `infra/terraform/` | Azure + Unity Catalog (Phase 10) |
+| `src/hc_lakehouse/` | Transforms, privacy, quality, governance, ML, ops, serving |
+| `conf/` | Contracts, DQ, cohorts, access matrix, ML, SLA, cluster policies |
+| `serving/sql/` | Dashboard SQL as code |
+| `notebooks/` | Researcher onboarding |
+| `pipelines/dlt/` | Cloud DLT Bronze→Silver |
+| `resources/` | Databricks Asset Bundle jobs/pipelines |
+| `infra/terraform/` | Azure + Unity Catalog |
 | `tests/` | Unit, integration, privacy, quality |
 | `docs/` | Architecture, HIPAA mapping, runbooks, ADRs |
 
 ## Assumptions
 
-Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
-[`ASSUMPTIONS.md`](ASSUMPTIONS.md).
+Resolved defaults (org, region, Safe Harbor, k=11, etc.): [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 
 ## Phase status
 
@@ -70,7 +79,7 @@ Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
 | 8 Governance | **Complete** |
 | 9 Data science / ML | **Complete** |
 | 10 Orchestration / CI-CD | **Complete** |
-| 11 Serving + docs polish | Pending |
+| 11 Serving + docs | **Complete** |
 
 ## License
 

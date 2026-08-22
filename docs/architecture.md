@@ -1,25 +1,50 @@
 # Architecture
 
-Phase 0 establishes the executable skeleton. Full medallion, Unity Catalog, and Azure
-landing-zone detail is expanded in later phases. See `ASSUMPTIONS.md` for resolved defaults.
+Indominus Health Research Consortium (INDHC) lakehouse on Azure Databricks + Delta Lake.
+Local mode runs the same Python package with PySpark + `delta-spark`.
+
+## End-to-end flow
+
+```mermaid
+flowchart LR
+  Landing[Landing CSV / Auto Loader] --> Bronze[Bronze raw + CDF]
+  Bronze --> Silver[Silver conformed + Safe Harbor]
+  Silver --> Restricted[restricted.patient_xref]
+  Silver --> Gold[Gold dims facts marts]
+  Gold --> Cohorts[Research cohorts]
+  Gold --> Features[ml.ft_* features]
+  Features --> ML[MLflow research models]
+  Gold --> Serving[SQL dashboards / warehouse]
+  DQ[DQ fail-closed] -.-> Silver
+  DQ -.-> Gold
+  Gov[UC grants + lineage] -.-> Silver
+  Gov -.-> Gold
+```
+
+## Azure landing zone
 
 ```mermaid
 flowchart TB
-  subgraph Azure["Azure landing zone (eastus2)"]
-    ADLS[ADLS Gen2 containers]
-    ADB[Databricks Premium VNet-injected]
-    AKV[Key Vault / CMK]
-    UC[Unity Catalog metastore]
-  end
-  subgraph Medallion
-    B[Bronze]
-    S[Silver]
-    G[Gold]
+  subgraph Azure["eastus2"]
+    ADLS[ADLS Gen2 HNS]
+    ADB[Databricks Premium]
+    AKV[Key Vault]
+    UC[UC metastore]
   end
   ADLS --> ADB
-  ADB --> B --> S --> G
   AKV --> ADB
   UC --> ADB
+  TF[Terraform] -.-> ADLS
+  TF -.-> UC
+  DAB[Asset Bundles] -.-> ADB
 ```
 
-Local mode replaces ADLS paths with `.local_delta/` and skips Private Link / UC grant APIs.
+## Environment isolation
+
+| Env | Catalog | Data |
+|-----|---------|------|
+| local/dev | `hc_dev` | Synthetic only |
+| test | `hc_test` | Synthetic / approved fixtures |
+| prod | `hc_prod` | Controlled research data (org-managed) |
+
+Production data never flows backward into dev.
