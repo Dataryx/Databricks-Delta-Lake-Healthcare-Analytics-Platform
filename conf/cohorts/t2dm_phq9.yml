@@ -1,0 +1,20 @@
+# Declarative cohort: T2DM-signal patients with PHQ-9
+name: t2dm_phq9
+version: 1
+irb_protocol_id: IRB-SYN-2024-001
+description: >
+  Patients with at least one HbA1c lab (LOINC 4548-4) and a scored PHQ-9
+  administration. Synthetic research cohort for platform demos.
+owner: hc_researchers_deid
+inclusion:
+  - type: has_lab_loinc
+    value: "4548-4"
+  - type: has_survey_instrument
+    value: PHQ-9
+exclusion:
+  - type: deceased
+index_date_rule: first_phq9_wave
+washout_days: 0
+follow_up_days: 365
+required_instruments:
+  - PHQ-9

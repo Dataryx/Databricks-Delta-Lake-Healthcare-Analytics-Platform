@@ -66,7 +66,8 @@ Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
 | 4 Privacy / Safe Harbor | **Complete** |
 | 5 Data quality | **Complete** |
 | 6 Gold | **Complete** |
-| 7–11 | Pending |
+| 7 Cohorts + reproducibility | **Complete** |
+| 8–11 | Pending |
 
 ## License
 

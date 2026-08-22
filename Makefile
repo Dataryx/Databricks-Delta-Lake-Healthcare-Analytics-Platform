@@ -9,7 +9,9 @@ TESTS := tests
 
 .PHONY: help setup install lint typecheck test test-unit test-integration \
 	phi-scan demo clean pre-commit-install spark-smoke format windows-hadoop \
-	generate-synthetic ingest-bronze build-silver run-dq build-gold
+	generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort
+
+COHORT ?= inpatient_utilizers
 
 help:
 	@echo "Targets:"
@@ -26,8 +28,9 @@ help:
 	@echo "  build-silver     Bronze → Silver core (patient/encounter/lab)"
 	@echo "  run-dq           Validate Silver; block on error-severity failures"
 	@echo "  build-gold       DQ-gated Gold dims/facts/marts"
+	@echo "  build-cohort     Materialize YAML cohort (COHORT=$(COHORT))"
 	@echo "  spark-smoke      Start local Spark+Delta and write a smoke Delta table"
-	@echo "  demo             full chain through Gold"
+	@echo "  demo             full chain through Gold + sample cohort"
 	@echo "  pre-commit-install  Install git hooks"
 	@echo "  clean            Remove local Delta, caches, build artifacts"
 
@@ -84,8 +87,11 @@ run-dq:
 build-gold:
 	$(PYTHON) scripts/build_gold.py
 
-demo: generate-synthetic ingest-bronze build-silver run-dq build-gold spark-smoke
-	@echo "Phases 0–6: synthetic → Bronze → Silver → DQ → Gold complete."
+build-cohort:
+	$(PYTHON) scripts/build_cohort.py --name $(COHORT)
+
+demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort spark-smoke
+	@echo "Phases 0–7: medallion + DQ + Gold + cohort/manifest complete."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"

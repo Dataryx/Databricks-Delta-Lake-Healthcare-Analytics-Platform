@@ -1,0 +1,14 @@
+# Declarative cohort: inpatient utilizers
+name: inpatient_utilizers
+version: 1
+irb_protocol_id: IRB-SYN-2024-001
+description: Patients with at least one inpatient encounter in gold.fact_encounter.
+owner: hc_researchers_deid
+inclusion:
+  - type: min_inpatient_encounters
+    value: 1
+exclusion: []
+index_date_rule: first_inpatient_admit
+washout_days: 30
+follow_up_days: 30
+required_instruments: []
