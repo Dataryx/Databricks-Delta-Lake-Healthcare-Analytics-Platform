@@ -1,0 +1,14 @@
+condition_id,patient_id,encounter_id,icd10_code,snomed_code,display,onset_ts,clinical_status,source_system
+SYN-COND-000001,SYN-PAT-000001,SYN-ENC-000001,F32.9,370143000,"Major depressive disorder, single episode",2022-03-28T08:00:00+00:00,active,synthea_sim
+SYN-COND-000002,SYN-PAT-000001,SYN-ENC-000002,E11.9,44054006,Type 2 diabetes mellitus without complications,2023-03-16T08:00:00+00:00,active,synthea_sim
+SYN-COND-000003,SYN-PAT-000001,SYN-ENC-000005,I10,59621000,Essential (primary) hypertension,2022-07-31T08:00:00+00:00,active,synthea_sim
+SYN-COND-000004,SYN-PAT-000002,SYN-ENC-000006,E11.9,44054006,Type 2 diabetes mellitus without complications,2023-08-16T08:00:00+00:00,active,synthea_sim
+SYN-COND-000005,SYN-PAT-000003,SYN-ENC-000007,I10,59621000,Essential (primary) hypertension,2022-08-11T08:00:00+00:00,active,synthea_sim
+SYN-COND-000006,SYN-PAT-000003,SYN-ENC-000008,F32.9,370143000,"Major depressive disorder, single episode",2022-06-01T08:00:00+00:00,active,synthea_sim
+SYN-COND-000007,SYN-PAT-000003,SYN-ENC-000009,I10,59621000,Essential (primary) hypertension,2022-06-27T08:00:00+00:00,active,synthea_sim
+SYN-COND-000008,SYN-PAT-000003,SYN-ENC-000010,F32.9,370143000,"Major depressive disorder, single episode",2023-01-28T08:00:00+00:00,active,synthea_sim
+SYN-COND-000009,SYN-PAT-000003,SYN-ENC-000011,F32.9,370143000,"Major depressive disorder, single episode",2023-05-03T08:00:00+00:00,active,synthea_sim
+SYN-COND-000010,SYN-PAT-000004,SYN-ENC-000013,F32.9,370143000,"Major depressive disorder, single episode",2023-06-16T08:00:00+00:00,active,synthea_sim
+SYN-COND-000011,SYN-PAT-000004,SYN-ENC-000015,E11.9,44054006,Type 2 diabetes mellitus without complications,2022-06-01T08:00:00+00:00,active,synthea_sim
+SYN-COND-000012,SYN-PAT-000005,SYN-ENC-000018,J45.909,195967001,"Unspecified asthma, uncomplicated",2022-04-14T08:00:00+00:00,active,synthea_sim
+SYN-COND-000013,SYN-PAT-000005,SYN-ENC-000019,M54.5,279039007,Low back pain,2022-05-30T08:00:00+00:00,active,synthea_sim

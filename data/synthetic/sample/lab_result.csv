@@ -1,0 +1,35 @@
+lab_result_id,patient_id,encounter_id,loinc_code,display,value_num,unit,resulted_ts,source_system
+SYN-LAB-000001,SYN-PAT-000001,SYN-ENC-000001,8480-6,Systolic blood pressure,160.98,mmHg,2022-04-01T15:00:00+00:00,synthea_sim
+SYN-LAB-000002,SYN-PAT-000001,SYN-ENC-000001,2160-0,Creatinine [Mass/volume] in Serum or Plasma,6.19,mg/dL,2022-04-01T15:00:00+00:00,synthea_sim
+SYN-LAB-000003,SYN-PAT-000001,SYN-ENC-000003,2160-0,Creatinine [Mass/volume] in Serum or Plasma,2.53,mg/dL,2022-10-21T08:00:00+00:00,synthea_sim
+SYN-LAB-000004,SYN-PAT-000001,SYN-ENC-000003,8480-6,Systolic blood pressure,183.57,mmHg,2022-10-21T08:00:00+00:00,synthea_sim
+SYN-LAB-000005,SYN-PAT-000001,SYN-ENC-000003,8480-6,Systolic blood pressure,131.73,mmHg,2022-10-21T08:00:00+00:00,synthea_sim
+SYN-LAB-000006,SYN-PAT-000001,SYN-ENC-000004,8480-6,Systolic blood pressure,171.67,mmHg,2022-11-08T05:00:00+00:00,synthea_sim
+SYN-LAB-000007,SYN-PAT-000001,SYN-ENC-000004,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,6.75,%,2022-11-08T05:00:00+00:00,synthea_sim
+SYN-LAB-000008,SYN-PAT-000002,SYN-ENC-000006,2339-0,Glucose [Mass/volume] in Blood,116.19,mg/dL,2023-08-16T08:00:00+00:00,synthea_sim
+SYN-LAB-000009,SYN-PAT-000002,SYN-ENC-000006,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,12.71,%,2023-08-16T08:00:00+00:00,synthea_sim
+SYN-LAB-000010,SYN-PAT-000002,SYN-ENC-000006,2085-9,Cholesterol in HDL [Mass/volume] in Serum,51.62,mg/dL,2023-08-16T08:00:00+00:00,synthea_sim
+SYN-LAB-000011,SYN-PAT-000003,SYN-ENC-000007,2085-9,Cholesterol in HDL [Mass/volume] in Serum,63.88,mg/dL,2022-08-16T01:00:00+00:00,synthea_sim
+SYN-LAB-000012,SYN-PAT-000003,SYN-ENC-000008,2160-0,Creatinine [Mass/volume] in Serum or Plasma,6.05,mg/dL,2022-06-03T03:00:00+00:00,synthea_sim
+SYN-LAB-000013,SYN-PAT-000003,SYN-ENC-000008,2085-9,Cholesterol in HDL [Mass/volume] in Serum,55.3,mg/dL,2022-06-03T03:00:00+00:00,synthea_sim
+SYN-LAB-000014,SYN-PAT-000003,SYN-ENC-000009,2160-0,Creatinine [Mass/volume] in Serum or Plasma,7.45,mg/dL,2022-06-27T08:00:00+00:00,synthea_sim
+SYN-LAB-000015,SYN-PAT-000003,SYN-ENC-000009,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,10.08,%,2022-06-27T08:00:00+00:00,synthea_sim
+SYN-LAB-000016,SYN-PAT-000003,SYN-ENC-000010,2085-9,Cholesterol in HDL [Mass/volume] in Serum,24.24,mg/dL,2023-02-01T14:00:00+00:00,synthea_sim
+SYN-LAB-000017,SYN-PAT-000003,SYN-ENC-000010,2160-0,Creatinine [Mass/volume] in Serum or Plasma,6.56,mg/dL,2023-02-01T14:00:00+00:00,synthea_sim
+SYN-LAB-000018,SYN-PAT-000003,SYN-ENC-000011,2085-9,Cholesterol in HDL [Mass/volume] in Serum,38.85,mg/dL,2023-05-03T20:00:00+00:00,synthea_sim
+SYN-LAB-000019,SYN-PAT-000003,SYN-ENC-000011,8480-6,Systolic blood pressure,139.8,mmHg,2023-05-03T20:00:00+00:00,synthea_sim
+SYN-LAB-000020,SYN-PAT-000003,SYN-ENC-000011,2160-0,Creatinine [Mass/volume] in Serum or Plasma,6.26,mg/dL,2023-05-03T20:00:00+00:00,synthea_sim
+SYN-LAB-000021,SYN-PAT-000003,SYN-ENC-000012,2085-9,Cholesterol in HDL [Mass/volume] in Serum,54.74,mg/dL,2022-11-29T02:00:00+00:00,synthea_sim
+SYN-LAB-000022,SYN-PAT-000004,SYN-ENC-000013,2339-0,Glucose [Mass/volume] in Blood,359.2,mg/dL,2023-06-19T05:00:00+00:00,synthea_sim
+SYN-LAB-000023,SYN-PAT-000004,SYN-ENC-000013,2339-0,Glucose [Mass/volume] in Blood,311.39,mg/dL,2023-06-19T05:00:00+00:00,synthea_sim
+SYN-LAB-000024,SYN-PAT-000004,SYN-ENC-000014,2160-0,Creatinine [Mass/volume] in Serum or Plasma,2.69,mg/dL,2023-05-11T20:00:00+00:00,synthea_sim
+SYN-LAB-000025,SYN-PAT-000004,SYN-ENC-000014,2160-0,Creatinine [Mass/volume] in Serum or Plasma,3.74,mg/dL,2023-05-11T20:00:00+00:00,synthea_sim
+SYN-LAB-000026,SYN-PAT-000004,SYN-ENC-000015,2339-0,Glucose [Mass/volume] in Blood,283.56,mg/dL,2022-06-03T21:00:00+00:00,synthea_sim
+SYN-LAB-000027,SYN-PAT-000004,SYN-ENC-000015,2160-0,Creatinine [Mass/volume] in Serum or Plasma,7.6,mg/dL,2022-06-03T21:00:00+00:00,synthea_sim
+SYN-LAB-000028,SYN-PAT-000004,SYN-ENC-000015,2339-0,Glucose [Mass/volume] in Blood,327.04,mg/dL,2022-06-03T21:00:00+00:00,synthea_sim
+SYN-LAB-000029,SYN-PAT-000005,SYN-ENC-000016,8480-6,Systolic blood pressure,161.52,mmHg,2023-11-13T17:00:00+00:00,synthea_sim
+SYN-LAB-000030,SYN-PAT-000005,SYN-ENC-000016,2339-0,Glucose [Mass/volume] in Blood,196.55,mg/dL,2023-11-13T17:00:00+00:00,synthea_sim
+SYN-LAB-000031,SYN-PAT-000005,SYN-ENC-000016,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,13.35,%,2023-11-13T17:00:00+00:00,synthea_sim
+SYN-LAB-000032,SYN-PAT-000005,SYN-ENC-000017,2160-0,Creatinine [Mass/volume] in Serum or Plasma,5.55,mg/dL,2023-04-20T22:00:00+00:00,synthea_sim
+SYN-LAB-000033,SYN-PAT-000005,SYN-ENC-000019,8480-6,Systolic blood pressure,131.46,mmHg,2022-06-03T10:00:00+00:00,synthea_sim
+SYN-LAB-000034,SYN-PAT-000005,SYN-ENC-000020,2085-9,Cholesterol in HDL [Mass/volume] in Serum,51.08,mg/dL,2022-11-10T12:00:00+00:00,synthea_sim

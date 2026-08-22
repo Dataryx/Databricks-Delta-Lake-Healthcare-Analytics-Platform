@@ -1,0 +1,21 @@
+provider_id,organization_id,family_name,given_name,npi_token,specialty,source_system
+SYN-PRV-000001,SYN-ORG-000001,Provider001,Clinician001,SYN-PRV-NPI-0001,internal medicine,synthea_sim
+SYN-PRV-000002,SYN-ORG-000002,Provider002,Clinician002,SYN-PRV-NPI-0002,cardiology,synthea_sim
+SYN-PRV-000003,SYN-ORG-000003,Provider003,Clinician003,SYN-PRV-NPI-0003,family,synthea_sim
+SYN-PRV-000004,SYN-ORG-000004,Provider004,Clinician004,SYN-PRV-NPI-0004,psychiatry,synthea_sim
+SYN-PRV-000005,SYN-ORG-000001,Provider005,Clinician005,SYN-PRV-NPI-0005,cardiology,synthea_sim
+SYN-PRV-000006,SYN-ORG-000002,Provider006,Clinician006,SYN-PRV-NPI-0006,psychiatry,synthea_sim
+SYN-PRV-000007,SYN-ORG-000003,Provider007,Clinician007,SYN-PRV-NPI-0007,family,synthea_sim
+SYN-PRV-000008,SYN-ORG-000004,Provider008,Clinician008,SYN-PRV-NPI-0008,family,synthea_sim
+SYN-PRV-000009,SYN-ORG-000001,Provider009,Clinician009,SYN-PRV-NPI-0009,family,synthea_sim
+SYN-PRV-000010,SYN-ORG-000002,Provider010,Clinician010,SYN-PRV-NPI-0010,family,synthea_sim
+SYN-PRV-000011,SYN-ORG-000003,Provider011,Clinician011,SYN-PRV-NPI-0011,psychiatry,synthea_sim
+SYN-PRV-000012,SYN-ORG-000004,Provider012,Clinician012,SYN-PRV-NPI-0012,family,synthea_sim
+SYN-PRV-000013,SYN-ORG-000001,Provider013,Clinician013,SYN-PRV-NPI-0013,internal medicine,synthea_sim
+SYN-PRV-000014,SYN-ORG-000002,Provider014,Clinician014,SYN-PRV-NPI-0014,internal medicine,synthea_sim
+SYN-PRV-000015,SYN-ORG-000003,Provider015,Clinician015,SYN-PRV-NPI-0015,internal medicine,synthea_sim
+SYN-PRV-000016,SYN-ORG-000004,Provider016,Clinician016,SYN-PRV-NPI-0016,internal medicine,synthea_sim
+SYN-PRV-000017,SYN-ORG-000001,Provider017,Clinician017,SYN-PRV-NPI-0017,family,synthea_sim
+SYN-PRV-000018,SYN-ORG-000002,Provider018,Clinician018,SYN-PRV-NPI-0018,psychiatry,synthea_sim
+SYN-PRV-000019,SYN-ORG-000003,Provider019,Clinician019,SYN-PRV-NPI-0019,psychiatry,synthea_sim
+SYN-PRV-000020,SYN-ORG-000004,Provider020,Clinician020,SYN-PRV-NPI-0020,family,synthea_sim

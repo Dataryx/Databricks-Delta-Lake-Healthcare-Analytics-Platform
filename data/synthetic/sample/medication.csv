@@ -1,0 +1,15 @@
+medication_id,patient_id,encounter_id,rxnorm_code,display,route,ordered_ts,source_system
+SYN-MED-000001,SYN-PAT-000001,SYN-ENC-000001,197361,Lisinopril 10 MG Oral Tablet,oral,2022-03-28T08:00:00+00:00,synthea_sim
+SYN-MED-000002,SYN-PAT-000001,SYN-ENC-000003,197361,Lisinopril 10 MG Oral Tablet,oral,2022-10-21T08:00:00+00:00,synthea_sim
+SYN-MED-000003,SYN-PAT-000001,SYN-ENC-000004,1049621,Albuterol 0.083% Inhalation Solution,inhalation,2022-11-07T08:00:00+00:00,synthea_sim
+SYN-MED-000004,SYN-PAT-000003,SYN-ENC-000007,860975,Metformin 500 MG Oral Tablet,oral,2022-08-11T08:00:00+00:00,synthea_sim
+SYN-MED-000005,SYN-PAT-000003,SYN-ENC-000008,197361,Lisinopril 10 MG Oral Tablet,oral,2022-06-01T08:00:00+00:00,synthea_sim
+SYN-MED-000006,SYN-PAT-000003,SYN-ENC-000009,860975,Metformin 500 MG Oral Tablet,oral,2022-06-27T08:00:00+00:00,synthea_sim
+SYN-MED-000007,SYN-PAT-000003,SYN-ENC-000010,197361,Lisinopril 10 MG Oral Tablet,oral,2023-01-28T08:00:00+00:00,synthea_sim
+SYN-MED-000008,SYN-PAT-000003,SYN-ENC-000012,1049621,Albuterol 0.083% Inhalation Solution,inhalation,2022-11-25T08:00:00+00:00,synthea_sim
+SYN-MED-000009,SYN-PAT-000004,SYN-ENC-000013,1049621,Albuterol 0.083% Inhalation Solution,inhalation,2023-06-16T08:00:00+00:00,synthea_sim
+SYN-MED-000010,SYN-PAT-000005,SYN-ENC-000016,1049621,Albuterol 0.083% Inhalation Solution,inhalation,2023-11-13T08:00:00+00:00,synthea_sim
+SYN-MED-000011,SYN-PAT-000005,SYN-ENC-000017,1049621,Albuterol 0.083% Inhalation Solution,inhalation,2023-04-17T08:00:00+00:00,synthea_sim
+SYN-MED-000012,SYN-PAT-000005,SYN-ENC-000018,197361,Lisinopril 10 MG Oral Tablet,oral,2022-04-14T08:00:00+00:00,synthea_sim
+SYN-MED-000013,SYN-PAT-000005,SYN-ENC-000019,1049621,Albuterol 0.083% Inhalation Solution,inhalation,2022-05-30T08:00:00+00:00,synthea_sim
+SYN-MED-000014,SYN-PAT-000005,SYN-ENC-000020,860975,Metformin 500 MG Oral Tablet,oral,2022-11-06T08:00:00+00:00,synthea_sim

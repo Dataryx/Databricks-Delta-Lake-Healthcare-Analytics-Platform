@@ -1,0 +1,13 @@
+procedure_id,patient_id,encounter_id,code,code_system,display,performed_ts,source_system
+SYN-PROC-000001,SYN-PAT-000001,SYN-ENC-000001,93000,CPT,Electrocardiogram complete,2022-03-28T08:00:00+00:00,synthea_sim
+SYN-PROC-000002,SYN-PAT-000001,SYN-ENC-000002,99213,CPT,Office/outpatient visit established,2023-03-16T08:00:00+00:00,synthea_sim
+SYN-PROC-000003,SYN-PAT-000001,SYN-ENC-000003,93000,CPT,Electrocardiogram complete,2022-10-21T08:00:00+00:00,synthea_sim
+SYN-PROC-000004,SYN-PAT-000001,SYN-ENC-000004,71046,CPT,Chest X-ray 2 views,2022-11-07T08:00:00+00:00,synthea_sim
+SYN-PROC-000005,SYN-PAT-000001,SYN-ENC-000005,99213,CPT,Office/outpatient visit established,2022-07-31T08:00:00+00:00,synthea_sim
+SYN-PROC-000006,SYN-PAT-000003,SYN-ENC-000008,93000,CPT,Electrocardiogram complete,2022-06-01T08:00:00+00:00,synthea_sim
+SYN-PROC-000007,SYN-PAT-000003,SYN-ENC-000010,93000,CPT,Electrocardiogram complete,2023-01-28T08:00:00+00:00,synthea_sim
+SYN-PROC-000008,SYN-PAT-000003,SYN-ENC-000011,71046,CPT,Chest X-ray 2 views,2023-05-03T08:00:00+00:00,synthea_sim
+SYN-PROC-000009,SYN-PAT-000004,SYN-ENC-000014,93000,CPT,Electrocardiogram complete,2023-05-11T08:00:00+00:00,synthea_sim
+SYN-PROC-000010,SYN-PAT-000004,SYN-ENC-000015,99213,CPT,Office/outpatient visit established,2022-06-01T08:00:00+00:00,synthea_sim
+SYN-PROC-000011,SYN-PAT-000005,SYN-ENC-000019,71046,CPT,Chest X-ray 2 views,2022-05-30T08:00:00+00:00,synthea_sim
+SYN-PROC-000012,SYN-PAT-000005,SYN-ENC-000020,99213,CPT,Office/outpatient visit established,2022-11-06T08:00:00+00:00,synthea_sim

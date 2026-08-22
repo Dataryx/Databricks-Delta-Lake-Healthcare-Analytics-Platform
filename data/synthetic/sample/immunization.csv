@@ -1,0 +1,4 @@
+immunization_id,patient_id,cvx_code,display,code_system,administered_ts,source_system
+SYN-IMM-000001,SYN-PAT-000003,208,"COVID-19, mRNA, LNP, PF, 30 mcg",CVX,2023-06-27T00:00:00+00:00,synthea_sim
+SYN-IMM-000002,SYN-PAT-000004,208,"COVID-19, mRNA, LNP, PF, 30 mcg",CVX,2023-01-15T00:00:00+00:00,synthea_sim
+SYN-IMM-000003,SYN-PAT-000005,140,"Influenza, seasonal, injectable",CVX,2022-01-08T00:00:00+00:00,synthea_sim

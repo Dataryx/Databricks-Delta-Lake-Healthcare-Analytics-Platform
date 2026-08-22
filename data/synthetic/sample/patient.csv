@@ -1,0 +1,6 @@
+patient_id,source_patient_token,family_name,given_name,birth_date,sex,race,ethnicity,postal_code,deceased_flag,source_system
+SYN-PAT-000001,SYNTOK00000001,Person0001,Pat0001,1957-11-01,other,unknown,nonhispanic,94102,False,synthea_sim
+SYN-PAT-000002,SYNTOK00000002,Person0002,Pat0002,1961-10-01,unknown,asian,hispanic,77001,False,synthea_sim
+SYN-PAT-000003,SYNTOK00000003,Person0003,Pat0003,1946-03-01,other,asian,nonhispanic,10001,False,synthea_sim
+SYN-PAT-000004,SYNTOK00000004,Person0004,Pat0004,1963-03-01,other,black,hispanic,60601,False,synthea_sim
+SYN-PAT-000005,SYNTOK00000005,Person0005,Pat0005,1963-01-01,other,other,hispanic,77001,False,synthea_sim

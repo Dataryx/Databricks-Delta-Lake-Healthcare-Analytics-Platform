@@ -60,6 +60,9 @@ RESEARCH_MANIFEST.json
 *.parquet
 !data/synthetic/**/*.parquet
 
+# Generated full landing corpus (keep tiny sample/ checked in)
+data/synthetic/landing/
+
 # Logs
 logs/
 *.log

@@ -60,7 +60,8 @@ Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
 | Phase | Status |
 |------|--------|
 | 0 Scaffold | **Complete** |
-| 1–11 | Pending |
+| 1 Synthetic data | **Complete** |
+| 2–11 | Pending |
 
 ## License
 

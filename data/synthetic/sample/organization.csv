@@ -1,0 +1,5 @@
+organization_id,name,npi_token,zip3,source_system
+SYN-ORG-000001,North River Medical Center,SYN-ORG-NPI-0001,606,synthea_sim
+SYN-ORG-000002,Cedar Grove Clinic,SYN-ORG-NPI-0002,021,synthea_sim
+SYN-ORG-000003,Lakeside Community Hospital,SYN-ORG-NPI-0003,941,synthea_sim
+SYN-ORG-000004,Summit Ambulatory Care,SYN-ORG-NPI-0004,100,synthea_sim

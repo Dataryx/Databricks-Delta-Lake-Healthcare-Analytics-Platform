@@ -1,0 +1,6 @@
+instrument_id,name,item_count,scoring_algorithm,source_system
+INSTR-PHQ9,PHQ-9,9,PHQ9_v1,survey_sim
+INSTR-GAD7,GAD-7,7,GAD7_v1,survey_sim
+INSTR-PROMIS29,PROMIS-29,28,PROMIS29_raw_v1,survey_sim
+INSTR-EQ5D5L,EQ-5D-5L,6,EQ5D5L_sum_v1,survey_sim
+INSTR-SF36,SF-36,36,SF36_raw_v1,survey_sim

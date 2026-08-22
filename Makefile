@@ -8,7 +8,8 @@ SRC := src/hc_lakehouse
 TESTS := tests
 
 .PHONY: help setup install lint typecheck test test-unit test-integration \
-	phi-scan demo clean pre-commit-install spark-smoke format windows-hadoop
+	phi-scan demo clean pre-commit-install spark-smoke format windows-hadoop \
+	generate-synthetic
 
 help:
 	@echo "Targets:"
@@ -20,8 +21,9 @@ help:
 	@echo "  test             Full pytest suite"
 	@echo "  test-unit        Unit tests only"
 	@echo "  phi-scan         Fail-closed PHI-shaped pattern scan"
+	@echo "  generate-synthetic  Build clinical + PRO landing files (seed=42)"
 	@echo "  spark-smoke      Start local Spark+Delta and write a smoke Delta table"
-	@echo "  demo             End-to-end Bronze→Silver→Gold (filled in later phases)"
+	@echo "  demo             generate-synthetic + spark-smoke (full chain later)"
 	@echo "  pre-commit-install  Install git hooks"
 	@echo "  clean            Remove local Delta, caches, build artifacts"
 
@@ -63,8 +65,11 @@ phi-scan:
 spark-smoke:
 	$(PYTHON) scripts/spark_smoke.py
 
-demo: spark-smoke
-	@echo "Phase 0 demo: Spark+Delta smoke only. Full medallion chain arrives in Phases 1–6."
+generate-synthetic:
+	$(PYTHON) scripts/generate_synthetic.py --output data/synthetic --seed 42 --patients 100
+
+demo: generate-synthetic spark-smoke
+	@echo "Phase 1 demo: synthetic landing + Spark smoke. Medallion chain arrives in Phases 2–6."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"
