@@ -61,7 +61,8 @@ Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
 |------|--------|
 | 0 Scaffold | **Complete** |
 | 1 Synthetic data | **Complete** |
-| 2–11 | Pending |
+| 2 Bronze | **Complete** |
+| 3–11 | Pending |
 
 ## License
 

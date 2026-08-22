@@ -1,12 +1,14 @@
-# Placeholder pipeline config — expanded in Phase 2 / Phase 10
 name: bronze_ingest
-enabled: false
-description: Auto Loader bronze ingestion (wired in Phase 2)
+enabled: true
+description: >
+  Local batch CSV ingest into Bronze Delta (Auto Loader cloudFiles on Databricks).
+  Technical columns + CDF + hash idempotency via hc_lakehouse.bronze.
 schedule: "0 */6 * * *"
 source:
-  format: cloudFiles
-  path_pattern: "landing/clinical/*"
+  format: cloudFiles  # local demo uses batch CSV instead
+  path_pattern: "landing/**/*.csv"
 target:
   schema: bronze
 checkpoints:
   root: checkpoints/bronze
+pipeline_version: "0.2.0"

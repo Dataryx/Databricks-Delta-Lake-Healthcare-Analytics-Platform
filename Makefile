@@ -9,7 +9,7 @@ TESTS := tests
 
 .PHONY: help setup install lint typecheck test test-unit test-integration \
 	phi-scan demo clean pre-commit-install spark-smoke format windows-hadoop \
-	generate-synthetic
+	generate-synthetic ingest-bronze
 
 help:
 	@echo "Targets:"
@@ -68,8 +68,11 @@ spark-smoke:
 generate-synthetic:
 	$(PYTHON) scripts/generate_synthetic.py --output data/synthetic --seed 42 --patients 100
 
-demo: generate-synthetic spark-smoke
-	@echo "Phase 1 demo: synthetic landing + Spark smoke. Medallion chain arrives in Phases 2–6."
+ingest-bronze:
+	$(PYTHON) scripts/ingest_bronze.py --landing data/synthetic/landing
+
+demo: generate-synthetic ingest-bronze spark-smoke
+	@echo "Phases 0–2: synthetic landing + Bronze Delta + Spark smoke OK."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"

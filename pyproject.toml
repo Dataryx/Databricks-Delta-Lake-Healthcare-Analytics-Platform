@@ -89,6 +89,7 @@ ignore = [
   "S101",  # assert OK in tests
   "S105",  # demo salt strings are not production secrets
   "S106",
+  "N812",  # PySpark `functions as F` is conventional
 ]
 
 [tool.ruff.lint.per-file-ignores]
