@@ -1,4 +1,4 @@
-﻿"""Platform configuration loader.
+"""Platform configuration loader.
 
 All table names, paths, thresholds, and environment knobs come from environment
 variables and YAML under ``config/``. No secrets are stored in this module.

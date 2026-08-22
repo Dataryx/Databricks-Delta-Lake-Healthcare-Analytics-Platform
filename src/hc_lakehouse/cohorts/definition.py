@@ -1,4 +1,4 @@
-﻿"""Cohort definition loading from ``config/cohorts/*.yml``."""
+"""Cohort definition loading from ``config/cohorts/*.yml``."""
 
 from __future__ import annotations
 

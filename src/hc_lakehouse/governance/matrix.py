@@ -1,4 +1,4 @@
-﻿"""Load and validate the access matrix from ``config/governance/access_matrix.yml``."""
+"""Load and validate the access matrix from ``config/governance/access_matrix.yml``."""
 
 from __future__ import annotations
 

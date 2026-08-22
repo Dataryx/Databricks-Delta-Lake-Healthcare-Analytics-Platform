@@ -15,8 +15,8 @@ variables:
     description: Minimum cell size for aggregate disclosure
     default: 11
   notification_email:
-    description: Job failure mailbox
-    default: "hc-platform-oncall@example.invalid"
+    description: On-call mailbox for job failures (override per target; do not commit real addresses)
+    default: "SET_NOTIFICATION_EMAIL_IN_TARGET"
 
 targets:
   local:

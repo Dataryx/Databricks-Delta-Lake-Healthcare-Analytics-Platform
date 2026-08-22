@@ -1,4 +1,4 @@
-﻿"""Schema contract loader and drift checks."""
+"""Schema contract loader and drift checks."""
 
 from __future__ import annotations
 

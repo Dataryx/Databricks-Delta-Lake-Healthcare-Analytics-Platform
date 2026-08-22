@@ -1,4 +1,4 @@
-﻿"""Data-quality rule definitions loaded from ``config/quality/*.yml``."""
+"""Data-quality rule definitions loaded from ``config/quality/*.yml``."""
 
 from __future__ import annotations
 

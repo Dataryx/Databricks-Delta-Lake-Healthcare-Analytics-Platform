@@ -1,4 +1,4 @@
-﻿# CI â€” lint, typecheck, tests, PHI scan, grants diff, terraform validate
+﻿# CI: lint, types, tests, PHI scan, grants dry-run, terraform validate
 
 name: CI
 
@@ -15,6 +15,7 @@ jobs:
   lint-type-test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.10", "3.11"]
     steps:

@@ -58,11 +58,7 @@ def build_ft_utilization_90d(fact_encounter: DataFrame) -> DataFrame:
         "los_days",
     )
     # 90 days in seconds; rowsBetween on range requires ORDER BY numeric
-    w = (
-        Window.partitionBy("patient_key")
-        .orderBy("_ts")
-        .rangeBetween(-90 * 86400, -1)
-    )
+    w = Window.partitionBy("patient_key").orderBy("_ts").rangeBetween(-90 * 86400, -1)
     return (
         base.withColumn("encounters_90d", F.count("*").over(w))
         .withColumn(
@@ -98,13 +94,9 @@ def build_ft_lab_trends(fact_lab: DataFrame) -> DataFrame:
         "lab_test_key",
         "value_num",
     )
-    w = (
-        Window.partitionBy("patient_key")
-        .orderBy("_ts")
-        .rangeBetween(-180 * 86400, 0)
-    )
+    w = Window.partitionBy("patient_key").orderBy("_ts").rangeBetween(-180 * 86400, 0)
     return (
-        base        .withColumn("lab_count_180d", F.count("*").over(w))
+        base.withColumn("lab_count_180d", F.count("*").over(w))
         .withColumn("distinct_labs_180d", F.size(F.collect_set("lab_test_key").over(w)))
         .withColumn("mean_lab_value_180d", F.avg("value_num").over(w))
         .select(

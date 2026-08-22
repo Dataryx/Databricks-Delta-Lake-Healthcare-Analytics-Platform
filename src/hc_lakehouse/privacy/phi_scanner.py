@@ -1,4 +1,4 @@
-﻿"""PHI-shaped pattern scanner for pre-commit and CI.
+"""PHI-shaped pattern scanner for pre-commit and CI.
 
 Scans text files for patterns that look like real identifiers (MRN, SSN, NPI,
 DOB, email, phone, ZIP+4). Synthetic fixtures must use clearly fake tokens that
