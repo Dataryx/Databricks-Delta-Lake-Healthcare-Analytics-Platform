@@ -1,0 +1,43 @@
+# ML model configuration (research / decision-support artifacts — not clinical devices)
+version: 1
+disclaimer: >
+  Models are research and decision-support artifacts only. They are not medical
+  devices, diagnostic tools, or clinical advice.
+tracking_uri_local: artifacts/mlruns
+registry_name_prefix: hc_dev.ml
+train_test_split:
+  test_size: 0.25
+  random_state: 42
+  strategy: patient_id  # never row-level
+temporal_validation:
+  enabled: true
+  cutoff_column: feature_as_of
+fairness_slices:
+  - age_band
+  - sex
+  - race
+  - ethnicity
+  - payer_group
+models:
+  readmission_30d:
+    label: readmission_30d
+    algorithm: hist_gradient_boosting
+    feature_tables:
+      - ml.ft_patient_demographics
+      - ml.ft_utilization_90d
+      - ml.ft_lab_trends
+      - ml.ft_comorbidity_index
+    calibration: isotonic
+  noshow:
+    label: no_show
+    algorithm: hist_gradient_boosting
+    feature_tables:
+      - ml.ft_patient_demographics
+      - ml.ft_utilization_90d
+      - ml.ft_prom_scores
+    calibration: sigmoid
+  prom_nonresponder_cluster:
+    algorithm: kmeans
+    n_clusters: 3
+    feature_tables:
+      - ml.ft_prom_scores

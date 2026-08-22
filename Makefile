@@ -10,7 +10,7 @@ TESTS := tests
 .PHONY: help setup install lint typecheck test test-unit test-integration \
 	phi-scan demo clean pre-commit-install spark-smoke format windows-hadoop \
 	generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort \
-	apply-governance
+	apply-governance build-features train-ml
 
 COHORT ?= inpatient_utilizers
 
@@ -31,8 +31,10 @@ help:
 	@echo "  build-gold       DQ-gated Gold dims/facts/marts"
 	@echo "  build-cohort     Materialize YAML cohort (COHORT=$(COHORT))"
 	@echo "  apply-governance Grants SQL, tags, lineage, audit/review seed"
+	@echo "  build-features   ML feature tables (ml.ft_*)"
+	@echo "  train-ml         Train/register research models + model cards"
 	@echo "  spark-smoke      Start local Spark+Delta and write a smoke Delta table"
-	@echo "  demo             full chain through Gold + cohort + governance"
+	@echo "  demo             full chain through Gold + cohort + governance + ML"
 	@echo "  pre-commit-install  Install git hooks"
 	@echo "  clean            Remove local Delta, caches, build artifacts"
 
@@ -42,7 +44,7 @@ setup: install windows-hadoop pre-commit-install
 
 install:
 	$(PIP) install -U pip setuptools wheel
-	$(PIP) install -e ".[dev]"
+	$(PIP) install -e ".[dev,ml]"
 
 windows-hadoop:
 	$(PYTHON) scripts/setup_windows_hadoop.py
@@ -95,8 +97,14 @@ build-cohort:
 apply-governance:
 	$(PYTHON) scripts/apply_governance.py
 
-demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort apply-governance spark-smoke
-	@echo "Phases 0–8: medallion + DQ + Gold + cohort + governance complete."
+build-features:
+	$(PYTHON) scripts/build_features.py
+
+train-ml:
+	$(PYTHON) scripts/train_ml.py
+
+demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort apply-governance build-features train-ml spark-smoke
+	@echo "Phases 0–9: medallion + DQ + Gold + cohort + governance + ML complete."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"

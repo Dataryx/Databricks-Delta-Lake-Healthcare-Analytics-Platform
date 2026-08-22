@@ -30,3 +30,10 @@ Template placeholders from the mission brief are resolved here.
 ## Change control
 
 Assumptions that affect architecture or privacy must be recorded as ADRs under `docs/adr/` and updated here in the same PR.
+
+## ML assumptions (Phase 9)
+
+7. **No-show labels** in local demo are **synthetically generated** (~20% rate) from ambulatory/outpatient encounters for pipeline proof only — not real attendance data.
+8. **Medication adherence** feature is an order-density proxy, not true PDC.
+9. **Models** are research / decision-support artifacts; they are not medical devices or clinical advice.
+10. **Local MLflow** uses `artifacts/mlruns`; Unity Catalog model registration is tagged for cloud apply in Phase 10.

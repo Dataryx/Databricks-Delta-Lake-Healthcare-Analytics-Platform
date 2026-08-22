@@ -23,8 +23,8 @@ make test
 make phi-scan
 ```
 
-`make demo` runs Phases 1–8: synthetic → Bronze → Silver → DQ → Gold → cohort →
-governance → Spark+Delta smoke.
+`make demo` runs Phases 1–9: synthetic → Bronze → Silver → DQ → Gold → cohort →
+governance → features → ML train → Spark+Delta smoke.
 
 ## Architecture (target)
 
@@ -45,7 +45,7 @@ flowchart LR
 | Path | Purpose |
 |------|---------|
 | `src/hc_lakehouse/` | Transformations, privacy, quality, governance |
-| `conf/` | Pipelines, contracts, DQ rules, cohorts, access matrix |
+| `conf/` | Pipelines, contracts, DQ rules, cohorts, access matrix, ML |
 | `infra/terraform/` | Azure + Unity Catalog (Phase 10) |
 | `tests/` | Unit, integration, privacy, quality |
 | `docs/` | Architecture, HIPAA mapping, runbooks, ADRs |
@@ -68,7 +68,8 @@ Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
 | 6 Gold | **Complete** |
 | 7 Cohorts + reproducibility | **Complete** |
 | 8 Governance | **Complete** |
-| 9–11 | Pending |
+| 9 Data science / ML | **Complete** |
+| 10–11 | Pending |
 
 ## License
 
