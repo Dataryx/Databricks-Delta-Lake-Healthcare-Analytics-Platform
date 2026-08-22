@@ -1,8 +1,7 @@
-"""Silver transforms for core clinical entities (pre–full Safe Harbor in Phase 4).
+"""Silver transforms for core clinical entities with Safe Harbor de-identification.
 
-Phase 3 establishes conformed keys as ``SYN-*`` surrogate stand-ins and drops
-direct name columns from published Silver tables. HMAC crosswalk + date shift
-land in Phase 4; until then ``patient_sk`` equals the synthetic source id.
+Patient surrogate keys are HMAC-SHA256 of source ids (pepper from Key Vault / env).
+Direct identifiers never land in Silver; the re-id crosswalk is ``restricted`` only.
 """
 
 from __future__ import annotations
@@ -11,10 +10,11 @@ from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 from pyspark.sql import functions as F
-from pyspark.sql.types import DoubleType, StringType, TimestampType
+from pyspark.sql.types import DoubleType, StringType
 
+from hc_lakehouse.privacy.deid import deidentify_patients
+from hc_lakehouse.privacy.hashing import attach_surrogate_key, write_patient_crosswalk
 from hc_lakehouse.silver.cleanse import (
-    canonical_lower,
     dedupe_latest,
     normalize_null_tokens,
     parse_ts,
@@ -31,7 +31,6 @@ if TYPE_CHECKING:
 
 logger = get_logger(__name__)
 
-# Columns that must never appear in Silver (direct identifiers)
 FORBIDDEN_SILVER_COLUMNS = frozenset(
     {
         "family_name",
@@ -40,6 +39,7 @@ FORBIDDEN_SILVER_COLUMNS = frozenset(
         "npi_token",
         "birth_date",
         "postal_code",
+        "patient_id",
     }
 )
 
@@ -51,68 +51,12 @@ def _read_bronze(spark: SparkSession, cfg: PlatformConfig, table: str) -> DataFr
     return read_delta(spark, path)
 
 
-def transform_patient(bronze: DataFrame, batch_id: str) -> DataFrame:
-    """Conformed patient demographics (SCD2 current snapshot).
+def transform_patient(bronze: DataFrame, batch_id: str, pepper: str) -> DataFrame:
+    """De-identified patient demographics (Safe Harbor-oriented).
 
-    Grain: one current row per patient_sk.
+    Grain: one current row per patient_sk (HMAC of source id).
     """
-    df = trim_strings(bronze)
-    df = normalize_null_tokens(df)
-    df = canonical_lower(df, ["sex", "race", "ethnicity"])
-    df = (
-        df.withColumn("patient_sk", F.col("patient_id"))
-        .withColumn("birth_year", F.year(F.to_date(F.col("birth_date"))))
-        .withColumn(
-            "age_band",
-            F.when(F.col("birth_year").isNull(), F.lit("unknown")).otherwise(
-                F.concat(
-                    F.floor((F.lit(2024) - F.col("birth_year")) / 10).cast(StringType()),
-                    F.lit("0s"),
-                )
-            ),
-        )
-        .withColumn("zip3", F.substring(F.col("postal_code"), 1, 3))
-        .withColumn(
-            "deceased_flag",
-            F.when(F.lower(F.col("deceased_flag").cast(StringType())).isin("true", "1"), True)
-            .when(F.lower(F.col("deceased_flag").cast(StringType())).isin("false", "0"), False)
-            .otherwise(F.lit(False)),
-        )
-        .withColumn("valid_from", F.lit(datetime(1900, 1, 1, tzinfo=timezone.utc)))
-        .withColumn("valid_to", F.lit(None).cast(TimestampType()))
-        .withColumn("is_current", F.lit(True))
-        .withColumn(
-            "row_hash",
-            F.sha2(
-                F.concat_ws(
-                    "|",
-                    F.col("patient_sk"),
-                    F.col("sex"),
-                    F.col("race"),
-                    F.col("ethnicity"),
-                    F.col("zip3"),
-                ),
-                256,
-            ),
-        )
-        .withColumn("_batch_id", F.lit(batch_id))
-    )
-    df = dedupe_latest(df, ["patient_sk"], "_ingest_ts")
-    out = df.select(
-        "patient_sk",
-        "sex",
-        "race",
-        "ethnicity",
-        "birth_year",
-        "age_band",
-        "zip3",
-        "deceased_flag",
-        "valid_from",
-        "valid_to",
-        "is_current",
-        "row_hash",
-        "_batch_id",
-    )
+    out = deidentify_patients(bronze, pepper, batch_id)
     for forbidden in FORBIDDEN_SILVER_COLUMNS:
         if forbidden in out.columns:
             raise ValueError(f"Forbidden identifier column in silver.patient: {forbidden}")
@@ -123,22 +67,26 @@ def transform_encounter(
     bronze: DataFrame,
     patients: DataFrame,
     batch_id: str,
+    pepper: str,
 ) -> tuple[DataFrame, DataFrame, DataFrame]:
-    """Conformed encounters; orphans and window violators returned for quarantine.
+    """Conformed encounters with HMAC patient_sk.
 
     Grain: one row per encounter_sk.
     Returns ``(good, patient_orphans, window_violations)``.
     """
     df = trim_strings(bronze)
     df = normalize_null_tokens(df)
-    df = canonical_lower(df, ["care_setting", "encounter_class"])
+    df = df.withColumn("care_setting", F.lower(F.col("care_setting")))
     df = parse_ts(df, "admit_ts")
     df = parse_ts(df, "discharge_ts")
+    df = attach_surrogate_key(df, "patient_id", "patient_sk", pepper)
     df = (
-        df.withColumn("encounter_sk", F.col("encounter_id"))
-        .withColumn("patient_sk", F.col("patient_id"))
-        .withColumn("provider_sk", F.col("provider_id"))
-        .withColumn("organization_sk", F.col("organization_id"))
+        df.withColumn("encounter_sk", F.sha2(F.col("encounter_id").cast("string"), 256))
+        .withColumn("provider_sk", F.sha2(F.coalesce(F.col("provider_id"), F.lit("")), 256))
+        .withColumn(
+            "organization_sk",
+            F.sha2(F.coalesce(F.col("organization_id"), F.lit("")), 256),
+        )
         .withColumn("_batch_id", F.lit(batch_id))
     )
     df = dedupe_latest(df, ["encounter_sk"], "_ingest_ts")
@@ -167,15 +115,22 @@ def transform_lab_result(
     patients: DataFrame,
     encounters: DataFrame,
     batch_id: str,
+    pepper: str,
 ) -> tuple[DataFrame, DataFrame]:
     """Conformed labs; unresolved patient/encounter rows go to quarantine."""
     df = trim_strings(bronze)
     df = normalize_null_tokens(df)
     df = parse_ts(df, "resulted_ts")
+    df = attach_surrogate_key(df, "patient_id", "patient_sk", pepper)
     df = (
-        df.withColumn("lab_result_sk", F.col("lab_result_id"))
-        .withColumn("patient_sk", F.col("patient_id"))
-        .withColumn("encounter_sk", F.col("encounter_id"))
+        df.withColumn("lab_result_sk", F.sha2(F.col("lab_result_id").cast("string"), 256))
+        .withColumn(
+            "encounter_sk",
+            F.when(
+                F.col("encounter_id").isNull() | (F.trim(F.col("encounter_id")) == ""),
+                F.lit(None).cast(StringType()),
+            ).otherwise(F.sha2(F.col("encounter_id").cast("string"), 256)),
+        )
         .withColumn("value_num", F.col("value_num").cast(DoubleType()))
         .withColumn("_batch_id", F.lit(batch_id))
     )
@@ -212,11 +167,13 @@ def build_silver_core(
 ) -> dict[str, int]:
     """Build silver.patient, silver.encounter, silver.lab_result from Bronze."""
     cfg = config or load_config()
+    pepper = cfg.deid_salt()
     bid = batch_id or datetime.now(timezone.utc).strftime("silver-%Y%m%dT%H%M%SZ")
     counts: dict[str, int] = {}
 
     patient_bronze = _read_bronze(spark, cfg, "patient_raw")
-    patients = transform_patient(patient_bronze, bid)
+    write_patient_crosswalk(spark, patient_bronze, config=cfg)
+    patients = transform_patient(patient_bronze, bid, pepper)
     assert_contract(patients, load_contract("patient"))
     write_delta(
         patients,
@@ -227,7 +184,7 @@ def build_silver_core(
     counts["patient"] = patients.count()
 
     enc_bronze = _read_bronze(spark, cfg, "encounter_raw")
-    encounters, enc_orphans, enc_window = transform_encounter(enc_bronze, patients, bid)
+    encounters, enc_orphans, enc_window = transform_encounter(enc_bronze, patients, bid, pepper)
     assert_contract(encounters, load_contract("encounter"))
     quarantine_rows(
         spark, enc_orphans, entity="encounter", reason_code="orphan", batch_id=bid, config=cfg
@@ -249,7 +206,7 @@ def build_silver_core(
     counts["encounter"] = encounters.count()
 
     lab_bronze = _read_bronze(spark, cfg, "lab_result_raw")
-    labs, lab_orphans = transform_lab_result(lab_bronze, patients, encounters, bid)
+    labs, lab_orphans = transform_lab_result(lab_bronze, patients, encounters, bid, pepper)
     assert_contract(labs, load_contract("lab_result"))
     quarantine_rows(
         spark, lab_orphans, entity="lab_result", reason_code="orphan", batch_id=bid, config=cfg
