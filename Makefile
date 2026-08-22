@@ -9,7 +9,8 @@ TESTS := tests
 
 .PHONY: help setup install lint typecheck test test-unit test-integration \
 	phi-scan demo clean pre-commit-install spark-smoke format windows-hadoop \
-	generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort
+	generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort \
+	apply-governance
 
 COHORT ?= inpatient_utilizers
 
@@ -29,8 +30,9 @@ help:
 	@echo "  run-dq           Validate Silver; block on error-severity failures"
 	@echo "  build-gold       DQ-gated Gold dims/facts/marts"
 	@echo "  build-cohort     Materialize YAML cohort (COHORT=$(COHORT))"
+	@echo "  apply-governance Grants SQL, tags, lineage, audit/review seed"
 	@echo "  spark-smoke      Start local Spark+Delta and write a smoke Delta table"
-	@echo "  demo             full chain through Gold + sample cohort"
+	@echo "  demo             full chain through Gold + cohort + governance"
 	@echo "  pre-commit-install  Install git hooks"
 	@echo "  clean            Remove local Delta, caches, build artifacts"
 
@@ -90,8 +92,11 @@ build-gold:
 build-cohort:
 	$(PYTHON) scripts/build_cohort.py --name $(COHORT)
 
-demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort spark-smoke
-	@echo "Phases 0–7: medallion + DQ + Gold + cohort/manifest complete."
+apply-governance:
+	$(PYTHON) scripts/apply_governance.py
+
+demo: generate-synthetic ingest-bronze build-silver run-dq build-gold build-cohort apply-governance spark-smoke
+	@echo "Phases 0–8: medallion + DQ + Gold + cohort + governance complete."
 
 pre-commit-install:
 	$(PYTHON) -m pre_commit install || echo "pre-commit not available; skip hooks"

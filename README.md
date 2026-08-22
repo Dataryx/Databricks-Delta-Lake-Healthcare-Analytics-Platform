@@ -23,8 +23,8 @@ make test
 make phi-scan
 ```
 
-`make demo` currently runs the Spark+Delta smoke path. The full Bronze → Silver → Gold
-chain is delivered across Phases 1–6.
+`make demo` runs Phases 1–8: synthetic → Bronze → Silver → DQ → Gold → cohort →
+governance → Spark+Delta smoke.
 
 ## Architecture (target)
 
@@ -67,7 +67,8 @@ Resolved template defaults (org, region, Safe Harbor, k=11, etc.) live in
 | 5 Data quality | **Complete** |
 | 6 Gold | **Complete** |
 | 7 Cohorts + reproducibility | **Complete** |
-| 8–11 | Pending |
+| 8 Governance | **Complete** |
+| 9–11 | Pending |
 
 ## License
 

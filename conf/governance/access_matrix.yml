@@ -1,16 +1,208 @@
-# Access matrix skeleton — fully implemented in Phase 8
+# Access matrix — Entra ID groups only; no direct user grants; no account users on PHI-adjacent
 version: 1
 org: INDHC
 principle: least_privilege_minimum_necessary
+hipaa_note: >
+  Technical safeguards that SUPPORT minimum-necessary access. Compliance also requires
+  organizational policy, BAAs, training, and audit — this file is not a certification.
+
 groups:
-  - hc_data_engineers
-  - hc_data_stewards
-  - hc_researchers_lds
-  - hc_researchers_deid
-  - hc_data_scientists
-  - hc_analysts
-  - hc_auditors
-  - hc_breakglass_reid
-grants: []
-masks: []
-row_filters: []
+  - id: hc_data_engineers
+    justification: Build and operate pipelines; manage Bronze/Silver/Gold definitions
+  - id: hc_data_stewards
+    justification: Own data quality rules, dictionary, and terminology triage
+  - id: hc_researchers_lds
+    justification: Limited Data Set under recorded DUA; full dates/ZIP5 when granted
+  - id: hc_researchers_deid
+    justification: De-identified Safe Harbor Silver/Gold for protocol-approved research
+  - id: hc_data_scientists
+    justification: Feature tables and ML training on de-identified assets
+  - id: hc_analysts
+    justification: Aggregate Gold marts and dashboards with small-cell suppression
+  - id: hc_auditors
+    justification: Read ops audit, DQ, and lineage; no clinical row-level research use
+  - id: hc_breakglass_reid
+    justification: Emergency re-identification via restricted crosswalk with justification log
+
+catalogs:
+  - hc_dev
+  - hc_test
+  - hc_prod
+
+# privilege: SELECT | MODIFY | ALL_PRIVILEGES | USE_SCHEMA | CREATE_TABLE
+grants:
+  # Engineers — pipeline ownership
+  - group: hc_data_engineers
+    asset: "*.bronze.*"
+    privilege: ALL_PRIVILEGES
+    justification: Ingest and maintain append-only Bronze
+  - group: hc_data_engineers
+    asset: "*.silver.*"
+    privilege: ALL_PRIVILEGES
+    justification: Conformance and de-id transforms
+  - group: hc_data_engineers
+    asset: "*.gold.*"
+    privilege: ALL_PRIVILEGES
+    justification: Publish dimensional models and marts
+  - group: hc_data_engineers
+    asset: "*.ops.*"
+    privilege: ALL_PRIVILEGES
+    justification: DQ, manifests, pipeline ops tables
+  - group: hc_data_engineers
+    asset: "*.ml.*"
+    privilege: ALL_PRIVILEGES
+    justification: Feature engineering pipelines
+
+  # Stewards
+  - group: hc_data_stewards
+    asset: "*.silver.*"
+    privilege: SELECT
+    justification: Validate quality and dictionary accuracy
+  - group: hc_data_stewards
+    asset: "*.gold.*"
+    privilege: SELECT
+    justification: Review published marts
+  - group: hc_data_stewards
+    asset: "*.ops.dq_results"
+    privilege: SELECT
+    justification: DQ scorecard ownership
+  - group: hc_data_stewards
+    asset: "*.ops.unmapped_codes"
+    privilege: ALL_PRIVILEGES
+    justification: Terminology triage
+
+  # De-identified researchers
+  - group: hc_researchers_deid
+    asset: "*.gold.*"
+    privilege: SELECT
+    justification: Analysis-ready de-identified research marts
+  - group: hc_researchers_deid
+    asset: "*.silver.patient"
+    privilege: SELECT
+    justification: De-identified demographics for cohort joins
+  - group: hc_researchers_deid
+    asset: "*.silver.encounter"
+    privilege: SELECT
+    justification: De-identified encounters
+  - group: hc_researchers_deid
+    asset: "*.ml.*"
+    privilege: SELECT
+    justification: Consume feature tables for research models
+
+  # LDS researchers (separate schema grants land with LDS tables in later hardening)
+  - group: hc_researchers_lds
+    asset: "*.gold.*"
+    privilege: SELECT
+    justification: LDS-eligible Gold under DUA (column masks enforce residual controls)
+
+  # Data scientists
+  - group: hc_data_scientists
+    asset: "*.gold.*"
+    privilege: SELECT
+    justification: Train models on governed Gold
+  - group: hc_data_scientists
+    asset: "*.ml.*"
+    privilege: ALL_PRIVILEGES
+    justification: Own feature tables and model registry artifacts
+  - group: hc_data_scientists
+    asset: "*.sandbox.*"
+    privilege: ALL_PRIVILEGES
+    justification: Personal sandbox with quotas
+
+  # Analysts — aggregates only posture via views
+  - group: hc_analysts
+    asset: "*.gold.mart_utilization"
+    privilege: SELECT
+    justification: k-suppressed utilization aggregates
+  - group: hc_analysts
+    asset: "*.gold.mart_patient_360"
+    privilege: SELECT
+    justification: De-identified patient rollups for dashboards
+
+  # Auditors
+  - group: hc_auditors
+    asset: "*.ops.*"
+    privilege: SELECT
+    justification: Audit DQ, lineage, access review, reid logs
+  - group: hc_auditors
+    asset: "*.gold.*"
+    privilege: SELECT
+    justification: Verify published assets without write
+
+  # Break-glass — restricted crosswalk ONLY
+  - group: hc_breakglass_reid
+    asset: "*.restricted.patient_xref"
+    privilege: SELECT
+    justification: Emergency re-id after ops.reid_request_log justification
+  - group: hc_breakglass_reid
+    asset: "*.ops.reid_request_log"
+    privilege: MODIFY
+    justification: Write justification before crosswalk read
+
+# Explicit denials documented for review (not granted to anyone except break-glass)
+deny_defaults:
+  - asset: "*.restricted.*"
+    except_groups: [hc_breakglass_reid]
+    justification: Re-identification crosswalk is break-glass only
+  - asset: "*.bronze.*"
+    except_groups: [hc_data_engineers, hc_auditors]
+    justification: Raw landing payloads are PHI-adjacent; researchers use Silver/Gold
+
+masks:
+  - name: mask_birth_year_non_lds
+    table: "*.silver.patient"
+    column: birth_year
+    expression: >
+      CASE WHEN is_account_group_member('hc_researchers_lds')
+           OR is_account_group_member('hc_data_engineers')
+           OR is_account_group_member('hc_data_stewards')
+           THEN birth_year ELSE NULL END
+    justification: Birth year retained for LDS/steward paths only in serving views
+
+  - name: mask_zip3_analyst
+    table: "*.gold.dim_patient"
+    column: zip3
+    expression: >
+      CASE WHEN is_account_group_member('hc_analysts')
+           AND NOT is_account_group_member('hc_researchers_deid')
+           THEN NULL ELSE zip3 END
+    justification: Analysts use region aggregates; suppress ZIP3 on dim for analyst-only principals
+
+row_filters:
+  - name: filter_protocol_cohorts
+    table: "*.gold.cohort_*"
+    function: >
+      EXISTS (
+        SELECT 1 FROM ops.protocol_cohort_access a
+        WHERE a.principal_group = current_user()
+           OR is_account_group_member(a.principal_group)
+          AND a.cohort_name = cohort_name
+          AND a.active = true
+      )
+    justification: Researchers see only cohorts on their approved protocol mapping
+
+tags:
+  defaults:
+    classification: sensitive
+    deid_status: deidentified
+    data_owner: hc_data_stewards
+    retention_class: research_7y
+  by_schema:
+    bronze:
+      classification: phi
+      deid_status: identified
+    silver:
+      classification: sensitive
+      deid_status: deidentified
+    gold:
+      classification: sensitive
+      deid_status: deidentified
+    restricted:
+      classification: phi
+      deid_status: identified
+    ops:
+      classification: internal
+      deid_status: n/a
+    ml:
+      classification: sensitive
+      deid_status: deidentified
