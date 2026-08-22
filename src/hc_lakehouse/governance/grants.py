@@ -28,8 +28,7 @@ def grant_to_sql(grant: Grant, catalog: str) -> str:
             f"GRANT {grant.privilege} ON SCHEMA {schema} TO `{grant.group}`;"
         )
     return (
-        f"-- {grant.justification}\n"
-        f"GRANT {grant.privilege} ON TABLE {target} TO `{grant.group}`;"
+        f"-- {grant.justification}\nGRANT {grant.privilege} ON TABLE {target} TO `{grant.group}`;"
     )
 
 
